@@ -9,6 +9,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+
+//...
+
+
+
 var factory = new ConnectionFactory()
 {
     HostName = "rabbitmq"
@@ -46,7 +51,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseEndpoints(endpoints =>

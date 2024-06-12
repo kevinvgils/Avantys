@@ -8,12 +8,12 @@ namespace ProgressService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProgressService : ControllerBase
+    public class ProgressController : ControllerBase
     {
         private static readonly ConcurrentQueue<string> messages = new ConcurrentQueue<string>();
         private readonly IModel _channel;
 
-        public ProgressService(IModel channel)
+        public ProgressController(IModel channel)
         {
             _channel = channel;
             _channel.ExchangeDeclare(exchange: "order_exchange", type: "direct");

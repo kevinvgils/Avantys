@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
-using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
@@ -16,14 +18,14 @@ var factory = new ConnectionFactory()
 
 bool connectionEstablished = false;
 int retries = 0;
+IModel model = null;
+
 while (!connectionEstablished && retries < 10)
 {
     try
     {
         var connection = factory.CreateConnection();
-        var model = connection.CreateModel();
-        builder.Services.AddSingleton<IModel>(model);
-
+        model = connection.CreateModel();
         connectionEstablished = true;
     }
     catch (BrokerUnreachableException)
@@ -34,18 +36,17 @@ while (!connectionEstablished && retries < 10)
     }
 }
 
-
+builder.Services.AddSingleton<IModel>(model);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseEndpoints(endpoints =>
