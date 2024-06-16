@@ -11,15 +11,19 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /App
 
 # Copy everything
-COPY . ./
+COPY ["InterviewService/InterviewService.csproj", "InterviewService/"]
+COPY ["Domain/*.csproj", "Domain/"]
 # Restore as distinct layers
-RUN dotnet restore
-# Build and publish a release
-RUN dotnet publish -c Release -o out
+RUN dotnet restore "InterviewService/InterviewService.csproj"
+COPY . .
+WORKDIR "/App/InterviewService"
+RUN dotnet build "InterviewService.csproj" -c Release -o /App/build
 
-# Build runtime image and declare startup command
+FROM build-env AS publish
+RUN dotnet publish "InterviewService.csproj" -c Release -o /App/publish
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
-COPY --from=build-env /App/out .
-ENTRYPOINT ["dotnet", "TestService.dll"]  
+COPY --from=publish /App/publish .
+ENTRYPOINT ["dotnet", "InterviewService.dll"]  
 

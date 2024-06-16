@@ -11,15 +11,19 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /App
 
 # Copy everything
-COPY . ./
+COPY ["ApplyService/ApplyService.csproj", "ApplyService/"]
+COPY ["Domain/*.csproj", "Domain/"]
 # Restore as distinct layers
-RUN dotnet restore
-# Build and publish a release
-RUN dotnet publish -c Release -o out
+RUN dotnet restore "ApplyService/ApplyService.csproj"
+COPY . .
+WORKDIR "/App/ApplyService"
+RUN dotnet build "ApplyService.csproj" -c Release -o /App/build
 
-# Build runtime image and declare startup command
+FROM build-env AS publish
+RUN dotnet publish "ApplyService.csproj" -c Release -o /App/publish
+
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
-COPY --from=build-env /App/out .
+COPY --from=publish /App/publish .
 ENTRYPOINT ["dotnet", "ApplyService.dll"]  
 

@@ -1,3 +1,4 @@
+using Domain.Events;
 using Domain.Users;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +7,7 @@ using RabbitMQ.Client.Events;
 using System.Collections.Concurrent;
 using System.Text;
 
-namespace ProgressService.Controllers
+namespace ApplyService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

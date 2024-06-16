@@ -1,23 +1,14 @@
-using RabbitMQ.Client;
+using InterviewService.Consumers;
+using MassTransit;
 using RabbitMQ.Client.Exceptions;
-using System.Data.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
-
-//...
-
-
-
-var factory = new ConnectionFactory()
-{
-    HostName = "rabbitmq"
-};
 
 bool connectionEstablished = false;
 int retries = 0;
@@ -25,12 +16,21 @@ while (!connectionEstablished && retries < 10)
 {
     try
     {
-        var connection = factory.CreateConnection();
-        var model = connection.CreateModel();
-        Console.WriteLine(model.ToString());
-        builder.Services.AddSingleton<IModel>(model);
-
+        builder.Services.AddMassTransit(x =>
+        {
+            x.AddConsumer<ApplyConsumer>();
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host("rabbitmq", "/");
+                cfg.ConfigureEndpoints(context);
+                cfg.ReceiveEndpoint("applicant_created_queue", e =>
+                {
+                    e.ConfigureConsumer<ApplyConsumer>(context);
+                });
+            });
+        });
         connectionEstablished = true;
+
     }
     catch (BrokerUnreachableException)
     {
@@ -41,10 +41,8 @@ while (!connectionEstablished && retries < 10)
 }
 
 
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

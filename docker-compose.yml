@@ -7,17 +7,17 @@ services:
       
   applyservice:
     build:
-      context: ./ApplyService
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./ApplyService/Dockerfile
     ports:
       - "5001:8080"
     depends_on:
       - rabbitmq
 
-  testservice:
+  interviewservice:
     build:
-      context: ./TestService
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./InterviewService/Dockerfile
     ports:
       - "5002:8080"
     depends_on:

@@ -12,16 +12,33 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-builder.Services.AddMassTransit(x =>
+bool connectionEstablished = false;
+int retries = 0;
+while (!connectionEstablished && retries < 10)
 {
-    x.UsingRabbitMq((context, cfg) =>
+    try
     {
-        cfg.Host("rabbitmq://localhost");
-    });
-});
+        builder.Services.AddMassTransit(x =>
+        {
+            x.UsingRabbitMq((context, cfg) =>
+            {
+                cfg.Host("rabbitmq", "/");
+                cfg.ConfigureEndpoints(context);
+            });
+        });
+        connectionEstablished = true;
+
+    }
+    catch (BrokerUnreachableException)
+    {
+        retries++;
+        Console.WriteLine($"Retrying RabbitMQ connection ({retries}/10)...");
+        Thread.Sleep(2000); // Wait 2 seconds before retrying
+    }
+}
 
 
-var app = builder.Build();
+    var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
