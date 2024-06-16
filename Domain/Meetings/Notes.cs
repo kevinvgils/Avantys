@@ -4,12 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Program
+namespace Domain.Meetings
 {
-    public interface IStudyMaterial
+    public class Notes
     {
         string Id { get; set; }
-        ILecture Lecture { get; set; }
         string Content { get; set; }
+
+        public Notes(string id, string content)
+        {
+            Id = id;
+            Content = content;
+        }
     }
 }

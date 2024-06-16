@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace Domain.Testing
 {
-    public interface IPoints
+    public class Points
     {
         string Id { get; set; }
         int Value { get; set; }
+
+        public Points(string id, int value)
+        {
+            Id = id;
+            Value = value;
+        }
     }
 }
