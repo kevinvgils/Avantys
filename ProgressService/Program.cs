@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
@@ -11,32 +12,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
-var factory = new ConnectionFactory()
+builder.Services.AddMassTransit(x =>
 {
-    HostName = "rabbitmq"
-};
-
-bool connectionEstablished = false;
-int retries = 0;
-IModel model = null;
-
-while (!connectionEstablished && retries < 10)
-{
-    try
+    x.UsingRabbitMq((context, cfg) =>
     {
-        var connection = factory.CreateConnection();
-        model = connection.CreateModel();
-        connectionEstablished = true;
-    }
-    catch (BrokerUnreachableException)
-    {
-        retries++;
-        Console.WriteLine($"Retrying RabbitMQ connection ({retries}/10)...");
-        Thread.Sleep(2000); // Wait 2 seconds before retrying
-    }
-}
+        cfg.Host("rabbitmq://localhost");
+    });
+});
 
-builder.Services.AddSingleton<IModel>(model);
 
 var app = builder.Build();
 
