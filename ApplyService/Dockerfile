@@ -13,6 +13,10 @@ WORKDIR /App
 # Copy everything
 COPY ["ApplyService/ApplyService.csproj", "ApplyService/"]
 COPY ["Domain/*.csproj", "Domain/"]
+COPY ["Infrastructure/*.csproj", "Infrastructure/"]
+COPY ["DomainServices/*.csproj", "DomainServices/"]
+
+
 # Restore as distinct layers
 RUN dotnet restore "ApplyService/ApplyService.csproj"
 COPY . .

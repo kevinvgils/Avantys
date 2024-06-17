@@ -1,18 +1,50 @@
 services:
+
+  sqlserver:
+    container_name: sqlserver
+    hostname: sqlserver
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: 'Y'
+      MSSQL_SA_PASSWORD: 'Passw0rd'
+      MSSQL_PID: 'Developer'
+    ports: 
+      - "1433:1433"
+    healthcheck:
+      test: "exit 0"
+    networks:
+      - mynetwork
+
   rabbitmq:
     image: rabbitmq:3-management
     ports:
       - "5672:5672"
       - "15672:15672"
-      
+    healthcheck:
+      test: "exit 0"
+    networks:
+      - mynetwork
+         
   applyservice:
     build:
       context: .
       dockerfile: ./ApplyService/Dockerfile
     ports:
       - "5001:8080"
+    restart: on-failure
     depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sqlserver:
+        condition: service_healthy
+    links:
       - rabbitmq
+      - sqlserver
+    command: echo "HI"
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
 
   interviewservice:
     build:
@@ -20,5 +52,19 @@ services:
       dockerfile: ./InterviewService/Dockerfile
     ports:
       - "5002:8080"
+    restart: on-failure
     depends_on:
       - rabbitmq
+      - sqlserver
+    links:
+      - rabbitmq
+      - sqlserver 
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+
+networks:
+  mynetwork:
+    driver: bridge
+

@@ -13,9 +13,15 @@ WORKDIR /App
 # Copy everything
 COPY ["InterviewService/InterviewService.csproj", "InterviewService/"]
 COPY ["Domain/*.csproj", "Domain/"]
+COPY ["Infrastructure/*.csproj", "Infrastructure/"]
+COPY ["DomainServices/*.csproj", "DomainServices/"]
+
+
 # Restore as distinct layers
 RUN dotnet restore "InterviewService/InterviewService.csproj"
+
 COPY . .
+
 WORKDIR "/App/InterviewService"
 RUN dotnet build "InterviewService.csproj" -c Release -o /App/build
 

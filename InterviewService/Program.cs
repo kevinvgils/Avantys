@@ -1,3 +1,5 @@
+using DomainServices;
+using Infrastructure;
 using InterviewService.Consumers;
 using MassTransit;
 using RabbitMQ.Client.Exceptions;
@@ -9,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
+
 
 bool connectionEstablished = false;
 int retries = 0;
