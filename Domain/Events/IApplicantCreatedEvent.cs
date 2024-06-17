@@ -2,9 +2,9 @@ namespace Domain.Events
 {
     public interface IApplicantCreatedEvent
     {
-        string StudentId { get; }
-        string Naam { get; }
+        string Name { get; }
         string Email { get; }
-        string Studieprogramma { get; }
+        string StudyProgram { get; }
+        Guid ApplicantId { get; }
     }
 }

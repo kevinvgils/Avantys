@@ -26,19 +26,30 @@ namespace ApplyService.Controllers
         [HttpPost]
         public async Task<IActionResult> Apply(IApply application)
         {
-            // Logica voor het verwerken van de aanmelding
-            // ...
-
-            var applicant = new Applicant();
-            applicant.Name = application.Naam;
-            applicant.Email = application.Email;
-            await _applyRepository.AddApplicant(applicant);
-
-            // Publiceer het evenement
-            await _publishEndpoint.Publish<IApplicantCreatedEvent>(new
+            try
             {
-                applicant.Name
-            });
+                var applicant = new Applicant();
+                applicant.Name = application.Name;
+                applicant.Email = application.Email;
+                applicant.IsAccepted = false;
+                applicant.ApplyDate = DateTime.UtcNow;
+                await _applyRepository.AddApplicant(applicant);
+
+                Applicant createdAp = _applyRepository.GetApplicant();
+
+                // Publiceer het evenement
+                await _publishEndpoint.Publish<IApplicantCreatedEvent>(new
+                {
+                    applicant.Name,
+                    applicant.Email,
+                    application.StudyProgram,
+                    createdAp.ApplicantId
+                });
+            } catch (Exception ex)
+            {
+                Console.WriteLine("ERROR HIERERRRRRRRRRRRRRRRR");
+                Console.WriteLine(ex.ToString());
+            }
 
             return Ok();
         }

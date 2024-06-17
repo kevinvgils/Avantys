@@ -20,7 +20,7 @@ namespace Infrastructure
 
         public Applicant GetApplicant()
         {
-            return _context.Applicants.SingleOrDefault();
+            return _context.Applicants.FirstOrDefault();
         }
     }
 }

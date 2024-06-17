@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{59415384-1220-4DCF-A8C3-5701B417120A}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
-		migration-script.sh = migration-script.sh
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{29C05775-C029-4C94-B9F1-84D043041E19}"
@@ -18,6 +17,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{621DFD32-505F-4AA4-96FA-FBE0367D2D97}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainServices", "DomainServices\DomainServices.csproj", "{CEF0D51A-1163-42D0-A242-103ABA6D57FE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentService", "StudentService\StudentService.csproj", "{EF086A99-DF56-4630-88D3-8F0F16B88D6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +46,10 @@ Global
 		{CEF0D51A-1163-42D0-A242-103ABA6D57FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEF0D51A-1163-42D0-A242-103ABA6D57FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEF0D51A-1163-42D0-A242-103ABA6D57FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF086A99-DF56-4630-88D3-8F0F16B88D6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF086A99-DF56-4630-88D3-8F0F16B88D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF086A99-DF56-4630-88D3-8F0F16B88D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF086A99-DF56-4630-88D3-8F0F16B88D6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

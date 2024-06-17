@@ -7,7 +7,7 @@ namespace InterviewService.Consumers
     {
         public Task Consume(ConsumeContext<IApplicantCreatedEvent> context)
         {
-            Console.WriteLine(context.Message.Naam);
+            Console.WriteLine(context.Message.Name);
 
             return Task.CompletedTask;
         }
