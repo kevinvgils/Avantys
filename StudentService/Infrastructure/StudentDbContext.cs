@@ -1,8 +1,5 @@
-﻿using Domain.Users;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Reflection.Emit;
+﻿using Microsoft.EntityFrameworkCore;
+using StudentService.Domain;
 
 namespace Infrastructure
 {

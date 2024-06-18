@@ -1,4 +1,4 @@
-namespace Domain.Events
+namespace ApplyService.Models
 {
     public class IApply
     {

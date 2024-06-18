@@ -1,6 +1,6 @@
-﻿using Domain.Users;
+﻿using ApplyService.Domain;
 
-namespace DomainServices
+namespace ApplyService.DomainServices
 {
     public interface IApplyRepository
     {

@@ -1,4 +1,4 @@
-﻿using Domain.Users;
+﻿using StudentService.Domain;
 
 namespace DomainServices
 {

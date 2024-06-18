@@ -1,7 +1,6 @@
-﻿using Domain.Users;
-using DomainServices;
-
-namespace Infrastructure
+﻿using ApplyService.Domain;
+using ApplyService.DomainServices;
+namespace ApplyService.Infrastructure
 {
     public class ApplyRepository : IApplyRepository
     {

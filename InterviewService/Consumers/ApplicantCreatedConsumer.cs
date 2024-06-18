@@ -1,11 +1,11 @@
-using Domain.Events;
+using EventLibrary;
 using MassTransit;
 
 namespace InterviewService.Consumers
 {
-    public class ApplyConsumer : IConsumer<IApplicantCreatedEvent>
+    public class ApplicantCreatedConsumer : IConsumer<ApplicantCreated>
     {
-        public Task Consume(ConsumeContext<IApplicantCreatedEvent> context)
+        public Task Consume(ConsumeContext<ApplicantCreated> context)
         {
             Console.WriteLine(context.Message.Name);
 

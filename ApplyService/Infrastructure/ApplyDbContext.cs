@@ -1,10 +1,7 @@
-﻿using Domain.Users;
+﻿using ApplyService.Domain;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Reflection.Emit;
 
-namespace Infrastructure
+namespace ApplyService.Infrastructure
 {
     public class ApplyDbContext : DbContext
     {

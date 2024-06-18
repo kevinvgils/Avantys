@@ -1,9 +1,9 @@
-using Domain.Events;
 using DomainServices;
+using EventLibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client.Exceptions;
+using RabbitMQ.Client;
 using StudentService.Consumers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-builder.Services.AddScoped<IConsumer<IApplicantCreatedEvent>, ApplyConsumer>();
+builder.Services.AddScoped<IConsumer<ApplicantCreated>, ApplicantCreatedConsumer>();
 
 builder.Services.AddDbContext<StudentDbContext>(options =>
 {
@@ -23,35 +23,29 @@ builder.Services.AddDbContext<StudentDbContext>(options =>
 });
 
 
-bool connectionEstablished = false;
-int retries = 0;
-while (!connectionEstablished && retries < 10)
+
+builder.Services.AddMassTransit(x =>
 {
-    try
+    x.AddConsumer<ApplicantCreatedConsumer>();
+    x.UsingRabbitMq((context, cfg) =>
     {
-        builder.Services.AddMassTransit(x =>
+        cfg.Host("rabbitmq", "/", h =>
         {
-            x.AddConsumer<ApplyConsumer>();
-            x.UsingRabbitMq((context, cfg) =>
+            h.Username("guest");
+            h.Password("guest");
+        });
+        cfg.ReceiveEndpoint("student-applicant-created-queue", e =>
+        {
+            e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
+            e.Bind("applicant-created", x =>
             {
-                cfg.Host("rabbitmq", "/");
-                cfg.ConfigureEndpoints(context);
-                cfg.ReceiveEndpoint("applicant_created_queue", e =>
-                {
-                    e.ConfigureConsumer<ApplyConsumer>(context);
-                });
+                x.RoutingKey = "#"; // wildcard to receive all messages
+                x.ExchangeType = "topic";
             });
         });
-        connectionEstablished = true;
 
-    }
-    catch (BrokerUnreachableException)
-    {
-        retries++;
-        Console.WriteLine($"Retrying RabbitMQ connection ({retries}/10)...");
-        Thread.Sleep(2000); // Wait 2 seconds before retrying
-    }
-}
+    });
+});
 
 
 var app = builder.Build();

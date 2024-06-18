@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Infrastructure.Migrations
+namespace StudentService.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplyDbContext))]
-    [Migration("20240617202956_Initial2")]
-    partial class Initial2
+    [DbContext(typeof(StudentDbContext))]
+    [Migration("20240618094747_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,32 +25,32 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Users.Applicant", b =>
+            modelBuilder.Entity("Domain.Users.Student", b =>
                 {
-                    b.Property<Guid>("ApplicantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("ApplyDate")
-                        .HasColumnType("datetime2");
+                    b.Property<Guid>("ApplicantId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsAccepted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("StudentId")
+                    b.Property<Guid?>("PaymentAuthId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("ApplicantId");
+                    b.Property<string>("StudyProgram")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Applicants");
+                    b.HasKey("Id");
+
+                    b.ToTable("Students");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,6 @@
-using Domain.Users;
 using DomainServices;
 using Microsoft.AspNetCore.Mvc;
+using StudentService.Domain;
 
 namespace StudentService.Controllers
 {

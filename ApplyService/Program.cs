@@ -1,9 +1,9 @@
-using DomainServices;
-using Infrastructure;
+using ApplyService.DomainServices;
+using ApplyService.Infrastructure;
+using EventLibrary;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client.Exceptions;
-
+using RabbitMQ.Client;
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -20,33 +20,24 @@ builder.Services.AddDbContext<ApplyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-bool connectionEstablished = false;
-int retries = 0;
-while (!connectionEstablished && retries < 10)
+builder.Services.AddMassTransit(x =>
 {
-    try
+    x.UsingRabbitMq((context, cfg) =>
     {
-        builder.Services.AddMassTransit(x =>
+        cfg.Host("rabbitmq", "/", h =>
         {
-            x.UsingRabbitMq((context, cfg) =>
-            {
-                cfg.Host("rabbitmq", "/");
-                cfg.ConfigureEndpoints(context);
-            });
+            h.Username("guest");
+            h.Password("guest");
         });
-        connectionEstablished = true;
 
-    }
-    catch (BrokerUnreachableException)
-    {
-        retries++;
-        Console.WriteLine($"Retrying RabbitMQ connection ({retries}/10)...");
-        Thread.Sleep(2000); // Wait 2 seconds before retrying
-    }
-}
+        cfg.Message<ApplicantCreated>(e => e.SetEntityName("applicant-created")); // specify exchange name
+        cfg.Publish<ApplicantCreated>(e => e.ExchangeType = "topic");
+    });
+});
 
 
-    var app = builder.Build();
+
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {

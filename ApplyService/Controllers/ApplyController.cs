@@ -1,12 +1,9 @@
-using Domain.Events;
-using Domain.Users;
-using DomainServices;
+using ApplyService.Domain;
+using ApplyService.DomainServices;
+using ApplyService.Models;
+using EventLibrary;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System.Collections.Concurrent;
-using System.Text;
 
 namespace ApplyService.Controllers
 {
@@ -14,42 +11,35 @@ namespace ApplyService.Controllers
     [Route("api/[controller]")]
     public class ApplyController : ControllerBase
     {
-        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IBus _IBus;
         private readonly IApplyRepository _applyRepository;
 
-        public ApplyController(IPublishEndpoint publishEndpoint, IApplyRepository applyRepository)
+        public ApplyController(IBus bus, IApplyRepository applyRepository)
         {
-            _publishEndpoint = publishEndpoint;
+            _IBus = bus;
             _applyRepository = applyRepository;
         }
 
         [HttpPost]
         public async Task<IActionResult> Apply(IApply application)
         {
-            try
-            {
-                var applicant = new Applicant();
-                applicant.Name = application.Name;
-                applicant.Email = application.Email;
-                applicant.IsAccepted = false;
-                applicant.ApplyDate = DateTime.UtcNow;
-                await _applyRepository.AddApplicant(applicant);
+            var applicant = new Applicant();
+            applicant.Name = application.Name;
+            applicant.Email = application.Email;
+            applicant.IsAccepted = false;
+            applicant.ApplyDate = DateTime.UtcNow;
+            await _applyRepository.AddApplicant(applicant);
 
-                Applicant createdAp = _applyRepository.GetApplicant();
+            ApplicantCreated ac = new();
+            ac.Name = application.Name;
+            ac.Email = application.Email;
+            ac.StudyProgram = application.StudyProgram;
+            ac.ApplicantId = applicant.ApplicantId;
 
-                // Publiceer het evenement
-                await _publishEndpoint.Publish<IApplicantCreatedEvent>(new
-                {
-                    applicant.Name,
-                    applicant.Email,
-                    application.StudyProgram,
-                    createdAp.ApplicantId
-                });
-            } catch (Exception ex)
-            {
-                Console.WriteLine("ERROR HIERERRRRRRRRRRRRRRRR");
-                Console.WriteLine(ex.ToString());
-            }
+            // Publiceer het evenement
+            await _IBus.Publish(ac);
+
+            Console.WriteLine("ENDPOINT PUBLHISHED");
 
             return Ok();
         }
