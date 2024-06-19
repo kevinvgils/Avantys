@@ -1,27 +1,34 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# To build application into a container from dockerfile:
+# docker build
+# To build application into a container from .NET (available since .NET 8):
+# dotnet publish /p:PublishProfile=DefaultContainer
 
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
+# To run this container (mapping port 8080 from the host, which might be your computer to 8080 of the container):
+# docker run -d -p 8080:8080 hello-container
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+# First we use the SDK base image to build our application
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+WORKDIR /App
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+# Copy everything
 COPY ["TestService/TestService.csproj", "TestService/"]
-RUN dotnet restore "./TestService/TestService.csproj"
+COPY ["TestService.Domain/*.csproj", "TestService.Domain/"]
+COPY ["EventLibrary/*.csproj", "EventLibrary/"]
+
+
+# Restore as distinct layers
+RUN dotnet restore "TestService/TestService.csproj"
+
 COPY . .
-WORKDIR "/src/TestService"
-RUN dotnet build "./TestService.csproj" -c %BUILD_CONFIGURATION% -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./TestService.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+WORKDIR "/App/TestService"
+RUN dotnet build "TestService.csproj" -c Release -o /App/build
 
-FROM base AS final
-WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "TestService.dll"]
+FROM build-env AS publish
+RUN dotnet publish "TestService.csproj" -c Release -o /App/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /App
+COPY --from=publish /App/publish .
+ENTRYPOINT ["dotnet", "TestService.dll"]  
+
