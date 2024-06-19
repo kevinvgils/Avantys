@@ -1,4 +1,3 @@
-using Domain.Events;
 using EventLibrary;
 using InterviewService.Consumers;
 using MassTransit;
