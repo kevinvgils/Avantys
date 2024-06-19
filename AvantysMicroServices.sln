@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplyService.Domain", "Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentService.Domain", "StudentService.Domain\StudentService.Domain.csproj", "{090CA612-3357-4250-9BDA-1B492749E801}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventLibrary", "EventLibrary\EventLibrary.csproj", "{562F5528-01C1-48D3-A1E9-5DD38B5526A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventLibrary", "EventLibrary\EventLibrary.csproj", "{562F5528-01C1-48D3-A1E9-5DD38B5526A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestService", "TestService\TestService.csproj", "{B1DB4087-48F5-4DA1-9A4A-C1DACB59E5C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{562F5528-01C1-48D3-A1E9-5DD38B5526A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{562F5528-01C1-48D3-A1E9-5DD38B5526A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{562F5528-01C1-48D3-A1E9-5DD38B5526A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1DB4087-48F5-4DA1-9A4A-C1DACB59E5C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1DB4087-48F5-4DA1-9A4A-C1DACB59E5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1DB4087-48F5-4DA1-9A4A-C1DACB59E5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1DB4087-48F5-4DA1-9A4A-C1DACB59E5C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
