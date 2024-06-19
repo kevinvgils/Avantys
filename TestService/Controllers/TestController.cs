@@ -23,14 +23,14 @@ namespace TestService.Controllers
             return _testRepository.getAllTests();
         }
 
-        [HttpGet]
-        public Test GetTest()
+        [HttpGet("{testId}")]
+        public Test GetTest(int testId)
         {
             return _testRepository.getTest();
         }
 
         [HttpPost]
-        public void CreateTest()
+        public void CreateTest(Test test)
         {
             _testRepository.createTest(new Test());
         }
