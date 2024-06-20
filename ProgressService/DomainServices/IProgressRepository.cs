@@ -6,6 +6,7 @@ namespace DomainServices
     public interface IProgressRepository
     {
         IEnumerable<Progress> getAllProgress();
+        Progress getProgress(Guid id);
 
         Task createProgress(Progress progress);
 

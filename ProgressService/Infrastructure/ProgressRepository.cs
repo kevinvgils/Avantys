@@ -1,5 +1,6 @@
 ﻿using DomainServices;
 using ProgressService.Domain;
+using System.Collections.Immutable;
 
 namespace Infrastructure
 {
@@ -20,7 +21,12 @@ namespace Infrastructure
 
         public IEnumerable<Progress> getAllProgress()
         {
-            throw new NotImplementedException();
+            return _context.Progress.ToImmutableArray();
+        }
+
+        public Progress getProgress(Guid id)
+        {
+            return _context.Progress.SingleOrDefault(x => x.Id == id);
         }
 
         public Task gradeProgress(Progress progress)
