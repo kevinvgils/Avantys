@@ -105,6 +105,26 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5006/health"]
 
+  teacherservice:
+    build:
+      context: .
+      dockerfile: ./TeacherService/Dockerfile
+    ports:
+      - "5007:8080"
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sqlserver:
+        condition: service_healthy
+    links:
+      - rabbitmq
+      - sqlserver 
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5006/health"]
+
 networks:
   mynetwork:
     driver: bridge
