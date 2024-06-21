@@ -1,7 +1,10 @@
 ﻿using DomainServices;
+using EventLibrary;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestService.Domain;
+using Model;
+using MassTransit;
 
 namespace TestService.Controllers
 {
@@ -11,10 +14,12 @@ namespace TestService.Controllers
     {
         // GET: TestController
         private readonly ITestRepository _testRepository;
+        private readonly IBus _IBus;
 
-        public TestController(ITestRepository testRepository)
+        public TestController(IBus bus, ITestRepository testRepository)
         {
             _testRepository = testRepository;
+            _IBus = bus;
         }
 
         [HttpGet]
@@ -30,9 +35,18 @@ namespace TestService.Controllers
         }
 
         [HttpPost]
-        public void CreateTest(Test test)
+        public async Task<IActionResult> CreateTest(TestModel test)
         {
-            _testRepository.createTest(new Test());
+            Test createdTest = new Test(test.Module, test.TestDate, test.TeacherId, test.ProctorId);
+
+            await _testRepository.createTest(createdTest);
+
+            TestCreated testCreated = new();
+            testCreated.TestId = createdTest.Id;
+            testCreated.Module = createdTest.Module;
+
+            await _IBus.Publish(testCreated);
+            return Ok();
         }
     }
 }

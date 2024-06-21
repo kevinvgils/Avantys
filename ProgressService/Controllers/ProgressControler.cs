@@ -1,4 +1,5 @@
 ﻿using DomainServices;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using ProgressService.Domain;
 using static System.Net.Mime.MediaTypeNames;
@@ -11,9 +12,11 @@ namespace ProgressService.Controllers
     {
         private readonly IProgressRepository _ProgressRepository;
 
+
         public ProgressController(IProgressRepository ProgressRepository)
         {
             _ProgressRepository = ProgressRepository;
+
         }
 
         [HttpGet]
@@ -28,10 +31,11 @@ namespace ProgressService.Controllers
             return _ProgressRepository.getProgress(new Guid(ProgressId));
         }
 
-        [HttpPost]
-        public void CreateProgress(Progress Progress)
+        [HttpPut("{ProgressId}/Grade")]
+        public void GradeProgress(string ProgressId, Progress progress)
         {
-            _ProgressRepository.createProgress(Progress);
+            progress.Id = new Guid(ProgressId);
+            _ProgressRepository.gradeProgress(progress);
         }
     }
 }

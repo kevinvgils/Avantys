@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Consumer\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\EventLibrary\EventLibrary.csproj" />
     <ProjectReference Include="..\ProgressService.Domain\ProgressService.Domain.csproj" />
   </ItemGroup>

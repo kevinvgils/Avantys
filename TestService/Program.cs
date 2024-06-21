@@ -29,6 +29,9 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
+
+        cfg.Message<ApplicantCreated>(e => e.SetEntityName("test-created")); // specify exchange name
+        cfg.Publish<ApplicantCreated>(e => e.ExchangeType = "topic");
     });
 });
 

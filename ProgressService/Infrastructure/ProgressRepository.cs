@@ -14,6 +14,16 @@ namespace Infrastructure
             _context = context;
         }
 
+        public async Task createMultipleProgress(Progress progress, List<Guid>? Students)
+        {
+            foreach(Guid student in Students)
+            {
+                progress.StudentId = student;
+                _context.Add(progress);
+            }
+            await _context.SaveChangesAsync();
+        }
+
         public Task createProgress(Progress progress)
         {
             throw new NotImplementedException();
@@ -29,9 +39,21 @@ namespace Infrastructure
             return _context.Progress.SingleOrDefault(x => x.Id == id);
         }
 
-        public Task gradeProgress(Progress progress)
+        public async Task gradeProgress(Progress progress)
         {
-            throw new NotImplementedException();
+            Progress? progressToGrade = _context.Progress.SingleOrDefault(x => x.Id == progress.Id);
+
+            if (progressToGrade != null)
+            {
+                progressToGrade.Grade = progress.Grade;
+                progressToGrade.StudyPoints = progress.StudyPoints;
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                // Handle the case where the progress with the specified ID is not found.
+                throw new Exception("Progress not found");
+            }
         }
     }
 }

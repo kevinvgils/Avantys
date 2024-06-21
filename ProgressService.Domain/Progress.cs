@@ -4,6 +4,8 @@
     {
         public Guid Id { get; set; }
         public Guid TestId { get; set; }
+        public Guid StudentId { get; set; }
+
         public string Module { get; set; }
 
         public float? Grade { get; set; }

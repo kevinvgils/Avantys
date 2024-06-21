@@ -4,28 +4,30 @@ namespace TestService.Domain
 {
     public class Test
     {
+        [Key]
         public Guid Id { get; set; }
 
         [Required]
         public DateTime TestDate { get; set; }
-        public Guid? ClassId { get; set; }
+        public string Module {  get; set; }
+
         public Guid? TeacherId { get; set; }
         public Guid? ProctorId { get; set; }
-        public Guid? SubjectId { get; set; }
-        public Guid? GradeId { get; set; }
+
+        public int? Grade { get; set; }
+        public int? StudyPoints { get; set; }
 
         public Test()
         {
 
         }
-        public Test(DateTime testDate, Guid classId, Guid teacherId, Guid proctorId, Guid subjectId, Guid gradeId)
+        public Test(string module, DateTime testDate, Guid teacherId, Guid proctorId)
         {
+            Id = Guid.NewGuid();
             TestDate = testDate;
-            ClassId = classId;
             TeacherId = teacherId;
             ProctorId = proctorId;
-            SubjectId = subjectId;
-            GradeId = gradeId;
+            Module = module;
         }
     }
 }

@@ -10,6 +10,8 @@ namespace DomainServices
 
         Task createProgress(Progress progress);
 
+        Task createMultipleProgress(Progress progress, List<Guid>? Students);
+
         Task gradeProgress(Progress progress);
     }
 }
