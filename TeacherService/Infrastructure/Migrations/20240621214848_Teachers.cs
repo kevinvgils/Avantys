@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace TeacherService.Migrations
+namespace TeacherService.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class Teachers : Migration

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace MeetingService.Migrations
+namespace MeetingService.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class Meetings : Migration
