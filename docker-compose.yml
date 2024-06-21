@@ -85,6 +85,26 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5003/health"]
 
+  testservice:
+    build:
+      context: .
+      dockerfile: ./TestService/Dockerfile
+    ports:
+      - "5004:8080"
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sqlserver:
+        condition: service_healthy
+    links:
+      - rabbitmq
+      - sqlserver 
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5004/health"]
+
   progressservice:
     build:
       context: .

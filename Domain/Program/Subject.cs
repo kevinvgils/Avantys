@@ -14,15 +14,13 @@ namespace Domain.Program
 
         ICollection<Lecture> Lectures { get; set; }
         ICollection<Grade> Grades { get; set; }
-        ICollection<Test> Tests { get; set; }
 
-        public Subject(string id, string name, ICollection<Lecture> lectures, ICollection<Grade> grades, ICollection<Test> tests)
+        public Subject(string id, string name, ICollection<Lecture> lectures, ICollection<Grade> grades)
         {
             Id = id;
             Name = name;
             Lectures = lectures;
             Grades = grades;
-            Tests = tests;
         }
     }
 }
