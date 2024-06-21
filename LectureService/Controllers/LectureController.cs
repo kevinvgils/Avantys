@@ -60,5 +60,20 @@ namespace LectureService.Controllers
                 return NotFound(ex.Message);
             }
         }
+
+        [HttpPost("add-study-material")]
+        public async Task<IActionResult> AddStudyMaterial(Guid lectureId, StudyMaterial studyMaterial)
+        {
+            try
+            {
+               await _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
+               
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
     }
 }

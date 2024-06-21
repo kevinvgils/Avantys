@@ -4,10 +4,8 @@ namespace LectureService.DomainServices
 {
     public interface IStudyMaterialRepository
     {
-        Task AddStudyMaterial(StudyMaterial studyMaterial);
+        Task AddStudyMaterial(StudyMaterial studyMaterial, Guid lectureId);
 
-        StudyMaterial GetStudyMaterialById(Guid id);
-
-        StudyMaterial GetAllStudyMaterial();
+        Task<StudyMaterial> GetStudyMaterialById(Guid studyMaterialId);
     }
 }

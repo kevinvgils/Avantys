@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<ILectureRepository, LectureRepository>();
+builder.Services.AddScoped<IStudyMaterialRepository, StudyMaterialRepository>();
 //builder.Services.AddScoped<IConsumer<ApplicantCreated>, ApplicantCreatedConsumer>();
 
 builder.Services.AddDbContext<LectureDbContext>(options =>
