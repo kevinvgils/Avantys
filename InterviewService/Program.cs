@@ -27,7 +27,7 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("interview-applicant-created-queue", e =>
         {
             e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
-            e.Bind("applicant-created", x =>
+            e.Bind("default-exchange", x =>
             {
                 x.RoutingKey = "#"; // wildcard to receive all messages
                 x.ExchangeType = "topic";

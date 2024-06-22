@@ -1,3 +1,4 @@
+using ApplyService.Domain;
 using MassTransit;
 
 namespace EventLibrary

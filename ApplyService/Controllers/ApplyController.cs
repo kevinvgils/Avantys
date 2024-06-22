@@ -1,5 +1,6 @@
 using ApplyService.Domain;
 using ApplyService.DomainServices;
+using ApplyService.DomainServices.Interfaces;
 using ApplyService.Models;
 using EventLibrary;
 using MassTransit;
@@ -12,12 +13,12 @@ namespace ApplyService.Controllers
     public class ApplyController : ControllerBase
     {
         private readonly IBus _IBus;
-        private readonly IApplyRepository _applyRepository;
+        private readonly IApplyService _applyService;
 
-        public ApplyController(IBus bus, IApplyRepository applyRepository)
+        public ApplyController(IBus bus, IApplyService applyService)
         {
             _IBus = bus;
-            _applyRepository = applyRepository;
+            _applyService = applyService;
         }
 
         [HttpPost]
@@ -28,20 +29,9 @@ namespace ApplyService.Controllers
             applicant.Email = application.Email;
             applicant.IsAccepted = false;
             applicant.ApplyDate = DateTime.UtcNow;
-            await _applyRepository.AddApplicant(applicant);
+            var createdApplicant = await _applyService.CreateApplicantyAsync(applicant);
 
-            ApplicantCreated ac = new();
-            ac.Name = application.Name;
-            ac.Email = application.Email;
-            ac.StudyProgram = application.StudyProgram;
-            ac.ApplicantId = applicant.ApplicantId;
-
-            // Publiceer het evenement
-            await _IBus.Publish(ac);
-
-            Console.WriteLine("ENDPOINT PUBLHISHED");
-
-            return Ok();
+            return Ok(createdApplicant);
         }
     }
 }

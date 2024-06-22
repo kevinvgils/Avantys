@@ -1,11 +1,11 @@
 ﻿using ApplyService.Domain;
 
-namespace ApplyService.DomainServices
+namespace ApplyService.DomainServices.Interfaces
 {
     public interface IApplyRepository
     {
-        Applicant GetApplicant();
-
         Task AddApplicant(Applicant applicant);
+
+        Task<Applicant> GetApplicantById(Guid applicantId);
     }
 }

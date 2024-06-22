@@ -34,10 +34,11 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
+
         cfg.ReceiveEndpoint("student-applicant-created-queue", e =>
         {
             e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
-            e.Bind("applicant-created", x =>
+            e.Bind("default-exchange", x =>
             {
                 x.RoutingKey = "#"; // wildcard to receive all messages
                 x.ExchangeType = "topic";

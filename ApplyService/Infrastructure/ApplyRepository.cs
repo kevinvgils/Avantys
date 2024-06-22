@@ -1,5 +1,6 @@
 ﻿using ApplyService.Domain;
-using ApplyService.DomainServices;
+using ApplyService.DomainServices.Interfaces;
+using Microsoft.EntityFrameworkCore;
 namespace ApplyService.Infrastructure
 {
     public class ApplyRepository : IApplyRepository
@@ -17,9 +18,9 @@ namespace ApplyService.Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public Applicant GetApplicant()
+        public async Task<Applicant> GetApplicantById(Guid applicantId)
         {
-            return _context.Applicants.FirstOrDefault();
+            return await _context.Applicants.FirstOrDefaultAsync(a => a.ApplicantId == applicantId);
         }
     }
 }
