@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace TestService.Infrastructure.Migrations
+namespace ProgressService.Infrastructure.Migrations
 {
-    [DbContext(typeof(TestDbContext))]
-    partial class TestDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ProgressDbContext))]
+    partial class ProgressDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -22,34 +22,31 @@ namespace TestService.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TestService.Domain.Test", b =>
+            modelBuilder.Entity("ProgressService.Domain.Progress", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("Grade")
-                        .HasColumnType("int");
+                    b.Property<float?>("Grade")
+                        .HasColumnType("real");
 
                     b.Property<string>("Module")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ProctorId")
+                    b.Property<Guid>("StudentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("StudyPoints")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("TeacherId")
+                    b.Property<Guid>("TestId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("TestDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tests");
+                    b.ToTable("Progress");
                 });
 #pragma warning restore 612, 618
         }
