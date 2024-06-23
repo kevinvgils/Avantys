@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace StudentService.Infrastructure.Migrations
 {
     [DbContext(typeof(StudentDbContext))]
-    [Migration("20240618094747_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240623182214_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,10 +25,11 @@ namespace StudentService.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Users.Student", b =>
+            modelBuilder.Entity("StudentService.Domain.Student", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("StudentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ApplicantId")
                         .HasColumnType("uniqueidentifier");
@@ -48,7 +49,7 @@ namespace StudentService.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("StudentId");
 
                     b.ToTable("Students");
                 });
