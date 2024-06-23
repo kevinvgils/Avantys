@@ -1,9 +1,9 @@
-﻿using MassTransit;
+﻿using Eventlibrary;
+using MassTransit;
 using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
 using ProgressService.Infrastructure.Migrations;
 using System.Linq;
-using static ProgressService.Domain.Event.ProgressEvents;
 
 namespace ProgressService.DomainServices
 {

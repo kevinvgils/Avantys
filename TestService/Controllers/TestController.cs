@@ -1,5 +1,4 @@
-﻿using EventLibrary;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TestService.Domain;
 using Model;

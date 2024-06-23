@@ -1,4 +1,4 @@
-using EventLibrary;
+using Eventlibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -30,8 +30,8 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
 
-        cfg.Message<ApplicantCreated>(e => e.SetEntityName("test-created")); // specify exchange name
-        cfg.Publish<ApplicantCreated>(e => e.ExchangeType = "topic");
+        cfg.Message<TestCreated>(e => e.SetEntityName("test-created")); // specify exchange name
+        cfg.Publish<TestCreated>(e => e.ExchangeType = "topic");
     });
 });
 

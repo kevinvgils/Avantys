@@ -1,4 +1,4 @@
-using EventLibrary;
+using Eventlibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +8,6 @@ using RabbitMQ.Client;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,7 +20,7 @@ builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 //service
 builder.Services.AddScoped<IProgressService, ProgressService.DomainServices.ProgressService>();
 
-builder.Services.AddScoped<IConsumer<TestCreated>, TestCreatedConsumer>(); //TODO: remove TestCreated and replace it with local.
+builder.Services.AddScoped<IConsumer<Test>, TestCreatedConsumer>(); //TODO: remove TestCreated and replace it with local.
 
 builder.Services.AddDbContext<ProgressDbContext>(options =>
 {
