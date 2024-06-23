@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProgressService.Domain;
+using static ProgressService.Domain.Event.ProgressEvents;
 
 namespace Infrastructure
 {

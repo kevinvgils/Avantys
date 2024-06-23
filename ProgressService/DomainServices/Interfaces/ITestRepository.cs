@@ -1,4 +1,5 @@
 ﻿using ProgressService.Domain;
+using static ProgressService.Domain.Event.ProgressEvents;
 
 namespace ProgressService.DomainServices.Interfaces
 {

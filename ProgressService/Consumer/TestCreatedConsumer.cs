@@ -2,6 +2,7 @@
 using MassTransit;
 using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
+using static ProgressService.Domain.Event.ProgressEvents;
 
 namespace ProgressService.Consumer
 {

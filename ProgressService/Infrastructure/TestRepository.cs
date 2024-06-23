@@ -1,6 +1,7 @@
 ﻿using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
 using System.Collections.Immutable;
+using static ProgressService.Domain.Event.ProgressEvents;
 
 namespace Infrastructure
 {

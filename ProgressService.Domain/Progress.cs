@@ -1,4 +1,6 @@
-﻿namespace ProgressService.Domain
+﻿using static ProgressService.Domain.Event.ProgressEvents;
+
+namespace ProgressService.Domain
 {
     public class Progress
     {
@@ -31,25 +33,6 @@
             Module = test.Module;
             Grade = null;
             StudyPoints = null;
-        }
-    }
-
-    public class Student
-    {
-        public Guid Id { get; set; }
-
-        public Student(Guid id) => Id = id;
-    }
-
-    public class Test
-    {
-        public Guid Id { get; set; }
-        public string Module { get; set; }
-
-        public Test(Guid id, string module)
-        {
-            Id = id;
-            Module = module;
         }
     }
 }
