@@ -15,8 +15,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+//repos
 builder.Services.AddScoped<IProgressRepository, ProgressRepository>();
-builder.Services.AddScoped<IConsumer<TestCreated>, StudentTestConsumer>();
+builder.Services.AddScoped<ITestRepository, TestRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+//service
+builder.Services.AddScoped<IProgressService, ProgressService.DomainServices.ProgressService>();
+
+builder.Services.AddScoped<IConsumer<TestCreated>, TestCreatedConsumer>(); //TODO: remove TestCreated and replace it with local.
 
 builder.Services.AddDbContext<ProgressDbContext>(options =>
 {
@@ -27,7 +33,7 @@ builder.Services.AddDbContext<ProgressDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<StudentTestConsumer>();
+    x.AddConsumer<TestCreatedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -37,7 +43,7 @@ builder.Services.AddMassTransit(x =>
         });
         cfg.ReceiveEndpoint("test-created-created-queue", e =>
         {
-            e.ConfigureConsumer<StudentTestConsumer>(context);
+            e.ConfigureConsumer<TestCreatedConsumer>(context);
             e.Bind("test-created", x =>
             {
                 x.RoutingKey = "#"; // wildcard to receive all messages

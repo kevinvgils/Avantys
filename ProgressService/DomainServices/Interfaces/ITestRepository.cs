@@ -1,6 +1,6 @@
 ﻿using ProgressService.Domain;
 
-namespace TestService.DomainServices.Interfaces
+namespace ProgressService.DomainServices.Interfaces
 {
     public interface ITestRepository
     {

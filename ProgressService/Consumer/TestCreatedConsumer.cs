@@ -7,17 +7,20 @@ namespace ProgressService.Consumer
 {
     public class TestCreatedConsumer : IConsumer<TestCreated>
     {
-        private readonly IProgressRepository _ProgressRepository;
+        private readonly ITestRepository _TestRepository;
+        private readonly IProgressService _progressService;
 
-        public TestCreatedConsumer(IProgressRepository ProgressRepository)
+        public TestCreatedConsumer(IProgressService progressService, ITestRepository testRepository)
         {
-            _ProgressRepository = ProgressRepository;
+            _progressService = progressService;
+            _TestRepository = testRepository;
         }
         public Task Consume(ConsumeContext<TestCreated> context)
         {
-
-            Progress Progress = new Progress(context.Message.TestId, context.Message.Module, null, null);
-            _ProgressRepository.createProgress(Progress);
+            Test test = new Test(context.Message.TestId, context.Message.Module);
+            _TestRepository.createTest(test);
+            _progressService.CreateProgressAsync(test);
+           
             Console.WriteLine("CONSUME");
 
             return Task.CompletedTask;
