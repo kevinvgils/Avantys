@@ -1,9 +1,9 @@
-using DomainServices;
 using EventLibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
+using TestService.DomainServices.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

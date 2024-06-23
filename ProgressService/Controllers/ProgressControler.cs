@@ -1,7 +1,7 @@
-﻿using DomainServices;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using ProgressService.Domain;
+using ProgressService.DomainServices.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ProgressService.Controllers

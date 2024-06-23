@@ -1,5 +1,5 @@
-﻿using DomainServices;
-using TestService.Domain;
+﻿using TestService.Domain;
+using TestService.DomainServices.Interfaces;
 
 namespace Infrastructure
 {

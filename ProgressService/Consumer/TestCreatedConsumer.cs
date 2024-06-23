@@ -1,7 +1,7 @@
-﻿using DomainServices;
-using EventLibrary;
+﻿using EventLibrary;
 using MassTransit;
 using ProgressService.Domain;
+using ProgressService.DomainServices.Interfaces;
 
 namespace ProgressService.Consumer
 {

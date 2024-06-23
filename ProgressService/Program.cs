@@ -1,9 +1,9 @@
-using DomainServices;
 using EventLibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Consumer;
+using ProgressService.DomainServices.Interfaces;
 using RabbitMQ.Client;
 
 

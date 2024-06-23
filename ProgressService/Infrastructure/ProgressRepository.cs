@@ -1,5 +1,5 @@
-﻿using DomainServices;
-using ProgressService.Domain;
+﻿using ProgressService.Domain;
+using ProgressService.DomainServices.Interfaces;
 using System.Collections.Immutable;
 
 namespace Infrastructure
@@ -14,19 +14,11 @@ namespace Infrastructure
             _context = context;
         }
 
-        public async Task createMultipleProgress(Progress progress, List<Guid>? Students)
-        {
-            foreach(Guid student in Students)
-            {
-                progress.StudentId = student;
-                _context.Add(progress);
-            }
-            await _context.SaveChangesAsync();
-        }
 
-        public Task createProgress(Progress progress)
+        public async Task<Progress> createProgress(Progress progress)
         {
-            throw new NotImplementedException();
+            await _context.Progress.AddAsync(progress);
+            return progress;
         }
 
         public IEnumerable<Progress> getAllProgress()

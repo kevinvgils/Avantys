@@ -1,16 +1,14 @@
 ﻿using System;
 using ProgressService.Domain;
 
-namespace DomainServices
+namespace ProgressService.DomainServices.Interfaces
 {
     public interface IProgressRepository
     {
         IEnumerable<Progress> getAllProgress();
         Progress getProgress(Guid id);
 
-        Task createProgress(Progress progress);
-
-        Task createMultipleProgress(Progress progress, List<Guid>? Students);
+        Task<Progress> createProgress(Progress progress);
 
         Task gradeProgress(Progress progress);
     }

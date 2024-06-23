@@ -1,5 +1,5 @@
 ﻿using TestService.Domain;
-namespace DomainServices
+namespace TestService.DomainServices.Interfaces
 {
     public interface ITestRepository
     {

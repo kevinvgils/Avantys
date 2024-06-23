@@ -13,15 +13,43 @@
 
         public Progress()
         {
-
+            Id = Guid.NewGuid();
         }
 
-        public Progress(Guid testId, string module, float? grade, int? studyPoints)
+        public Progress(Guid testId, Guid studentId, string module, float? grade, int? studyPoints) : this()
         {
             TestId = testId;
+            StudentId = studentId;
             Module = module;
             Grade = grade;
             StudyPoints = studyPoints;
+        }
+        public Progress(Test test, Student student) : this()
+        {
+            TestId = test.Id;
+            StudentId = student.Id;
+            Module = test.Module;
+            Grade = null;
+            StudyPoints = null;
+        }
+    }
+
+    public class Student
+    {
+        public Guid Id { get; set; }
+
+        public Student(Guid id) => Id = id;
+    }
+
+    public class Test
+    {
+        public Guid Id { get; set; }
+        public string Module { get; set; }
+
+        public Test(Guid id, string module)
+        {
+            Id = id;
+            Module = module;
         }
     }
 }
