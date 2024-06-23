@@ -32,6 +32,8 @@ builder.Services.AddDbContext<ProgressDbContext>(options =>
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<TestCreatedConsumer>();
+    x.AddConsumer<StudentCreatedConsumer>(); // Add StudentCreatedConsumer
+
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -39,7 +41,9 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
-        cfg.ReceiveEndpoint("test-created-created-queue", e =>
+
+        // Configure endpoints for consumers
+        cfg.ReceiveEndpoint("test-created-queue", e =>
         {
             e.ConfigureConsumer<TestCreatedConsumer>(context);
             e.Bind("test-created", x =>
@@ -49,6 +53,15 @@ builder.Services.AddMassTransit(x =>
             });
         });
 
+        cfg.ReceiveEndpoint("student-created-queue", e =>
+        {
+            e.ConfigureConsumer<StudentCreatedConsumer>(context);
+            e.Bind("student-created", x =>
+            {
+                x.RoutingKey = "#"; // wildcard to receive all messages
+                x.ExchangeType = "topic";
+            });
+        });
     });
 });
 

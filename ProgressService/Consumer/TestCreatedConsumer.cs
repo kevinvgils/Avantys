@@ -21,7 +21,7 @@ namespace ProgressService.Consumer
             _TestRepository.createTest(test);
             _progressService.CreateProgressAsync(test);
            
-            Console.WriteLine("CONSUME");
+            Console.WriteLine("CONSUME Test");
 
             return Task.CompletedTask;
         }
