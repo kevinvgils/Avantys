@@ -33,6 +33,8 @@ builder.Services.AddDbContext<EventStoreDbContext>(options =>
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<ApplicantCreatedConsumer>();
+    x.AddConsumer<ApplicantUpdatedConsumer>();
+    x.AddConsumer<InterviewCreatedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -43,16 +45,20 @@ builder.Services.AddMassTransit(x =>
 
         cfg.Message<ApplicantCreated>(e => { e.SetEntityName("default-exchange");  });
         cfg.Publish<ApplicantCreated>(e => { e.ExchangeType = "topic"; });
+        cfg.Message<ApplicantUpdated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<ApplicantUpdated>(e => { e.ExchangeType = "topic"; });
 
         cfg.ReceiveEndpoint("apply-applicant-created-queue", e =>
         {
             e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
+            e.ConfigureConsumer<ApplicantUpdatedConsumer>(context);
+            e.ConfigureConsumer<InterviewCreatedConsumer>(context);
             e.Bind("default-exchange", x =>
             {
-                x.RoutingKey = "#"; // wildcard to receive all messages
                 x.ExchangeType = "topic";
             });
         });
+        cfg.ConfigureEndpoints(context);
     });
 
 });

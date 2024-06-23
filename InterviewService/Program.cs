@@ -1,3 +1,4 @@
+using EventLibrary;
 using InterviewService.Consumers;
 using InterviewService.DomainServices;
 using InterviewService.DomainServices.Interfaces;
@@ -35,6 +36,10 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
+
+        cfg.Message<InterviewUpdated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<InterviewUpdated>(e => { e.ExchangeType = "topic"; });
+
         cfg.ReceiveEndpoint("interview-applicant-created-queue", e =>
         {
             e.ConfigureConsumer<ApplicantCreatedConsumer>(context);

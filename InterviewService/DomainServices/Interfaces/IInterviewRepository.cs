@@ -7,5 +7,7 @@ namespace InterviewService.DomainServices.Interfaces
         Task CreateInterview(Interview interview);
 
         Task<Interview> GetInterviewById(Guid interviewId);
+        Task UpdateInterview(Interview interview);
+
     }
 }

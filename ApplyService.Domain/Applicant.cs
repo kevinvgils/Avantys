@@ -15,6 +15,8 @@ namespace ApplyService.Domain
         public DateTime ApplyDate { get; set; }
         public string Name { get; set; }
         public bool IsAccepted { get; set; }
+        public string? StudyProgram { get; set; }
+
 
 
         private void ApplyEvent(ApplicantCreated @event) 
@@ -25,6 +27,20 @@ namespace ApplyService.Domain
             Name = @event.Name;
             IsAccepted = false;
             ApplyDate = DateTime.UtcNow;
+            StudyProgram = @event.StudyProgram;
+        }
+
+        private void ApplyEvent(InterviewUpdated @event)
+        {
+            IsAccepted = @event.IsAccepted;
+        }
+        private void ApplyEvent(ApplicantUpdated @event)
+        {
+            Name = @event.Name;
+            Email = @event.Email;
+            IsAccepted = @event.IsAccepted;
+            StudyProgram = @event.StudyProgram;
+            ApplicantId = @event.ApplicantId;
         }
 
         public void ApplyEvent(DomainEvent @event) 
@@ -33,6 +49,12 @@ namespace ApplyService.Domain
             {
                 case ApplicantCreated created:
                     ApplyEvent(created);
+                    break;
+                case ApplicantUpdated updatedApplicant:
+                    ApplyEvent(updatedApplicant);
+                    break;
+                case InterviewUpdated updated:
+                    ApplyEvent(updated);
                     break;
             }
         }

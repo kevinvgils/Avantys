@@ -1,34 +1,43 @@
+using InterviewService.Domain;
+using InterviewService.DomainServices.Interfaces;
+using InterviewService.Models;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQ.Client;
 using System.Text;
 
-namespace TestService.Controllers
+namespace InterviewService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TestController : ControllerBase
+    public class InterviewController : ControllerBase
     {
-        [HttpPost]
-        public IActionResult CreateOrder()
+        private readonly IInterviewService _interviewService;
+
+        public InterviewController(IInterviewService interviewService)
         {
-            var factory = new ConnectionFactory() { HostName = "rabbitmq" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            _interviewService = interviewService;
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EndInterview(Guid id, [FromBody] IEndInterview endInterview)
+        {
+            if (endInterview.Status != "Accepted" && endInterview.Status != "Declined")
             {
-                channel.ExchangeDeclare(exchange: "order_exchange", type: "direct");
+                return BadRequest("Status must be 'Accepted' or 'Declined'");
+            }
+            var interview = new Interview();
+            interview.Status = endInterview.Status;
+            interview.Comments = endInterview.Comments;
+            var updatedInterview = await _interviewService.UpdateInterviewAsync(id, interview);
 
-                var message = "Order Created";
-                var body = Encoding.UTF8.GetBytes(message);
-
-                channel.BasicPublish(exchange: "order_exchange",
-                                     routingKey: "order_created",
-                                     basicProperties: null,
-                                     body: body);
-
-                Console.WriteLine($"[x] Sent {message}");
+            if (updatedInterview == null)
+            {
+                return NotFound("Interview not found");
             }
 
-            return Ok("Order created and message sent to RabbitMQ.");
+            return Ok(updatedInterview);
+
         }
+
     }
 }

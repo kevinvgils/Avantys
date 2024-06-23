@@ -29,9 +29,17 @@ namespace ApplyService.Controllers
             applicant.Email = application.Email;
             applicant.IsAccepted = false;
             applicant.ApplyDate = DateTime.UtcNow;
+            applicant.StudyProgram = application.StudyProgram;
             var createdApplicant = await _applyService.CreateApplicantAsync(applicant);
 
             return Ok(createdApplicant);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Applicant>>> GetAllApplicants()
+        {
+            var applicants = await _applyService.GetAllApplicantsAsync();
+            return Ok(applicants);
         }
     }
 }

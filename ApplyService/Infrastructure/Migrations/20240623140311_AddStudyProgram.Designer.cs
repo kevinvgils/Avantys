@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApplyService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplyDbContext))]
-    [Migration("20240618093530_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240623140311_AddStudyProgram")]
+    partial class AddStudyProgram
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace ApplyService.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Users.Applicant", b =>
+            modelBuilder.Entity("ApplyService.Domain.Applicant", b =>
                 {
                     b.Property<Guid>("ApplicantId")
                         .ValueGeneratedOnAdd()
@@ -47,6 +47,9 @@ namespace ApplyService.Infrastructure.Migrations
 
                     b.Property<Guid?>("StudentId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("StudyProgram")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ApplicantId");
 

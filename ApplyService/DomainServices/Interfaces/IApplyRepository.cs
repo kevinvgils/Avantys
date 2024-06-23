@@ -7,5 +7,8 @@ namespace ApplyService.DomainServices.Interfaces
         Task AddApplicant(Applicant applicant);
 
         Task<Applicant> GetApplicantById(Guid applicantId);
+        Task UpdateApplicant(Applicant applicantToUpdate);
+        Task<List<Applicant>> GetAllApplicantsAsync();
+
     }
 }

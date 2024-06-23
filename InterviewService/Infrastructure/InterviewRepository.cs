@@ -19,9 +19,15 @@ namespace InterviewService.Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public Task<Interview> GetInterviewById(Guid interviewId)
+        public async Task<Interview> GetInterviewById(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Interviews.FindAsync(id);
+        }
+
+        public async Task UpdateInterview(Interview interview)
+        {
+            _context.Interviews.Update(interview);
+            await _context.SaveChangesAsync();
         }
     }
 }

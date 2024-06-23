@@ -15,9 +15,6 @@ namespace StudentService.Consumers
         }
         public Task Consume(ConsumeContext<ApplicantCreated> context)
         {
-
-            Student student = new Student(context.Message.Name, context.Message.ApplicantId, context.Message.StudyProgram, context.Message.Name);
-            _studentRepository.AddStudent(student);
             Console.WriteLine("CONSUME");
 
             return Task.CompletedTask;
