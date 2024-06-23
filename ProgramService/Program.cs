@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 using ProgramService.DomainServices.Interfaces;
 using Infrastructure;
+using ProgramService.DomainServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
+builder.Services.AddScoped<IProgramService, StudyProgramService>(); 
 
 builder.Services.AddDbContext<ProgramDbContext>(options =>
 {
