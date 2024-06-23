@@ -1,12 +1,11 @@
-﻿using EventLibrary;
-using MassTransit;
+﻿using MassTransit;
 using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
-using static ProgressService.Domain.Event.ProgressEvents;
+using Eventlibrary;
 
 namespace ProgressService.Consumer
 {
-    public class TestCreatedConsumer : IConsumer<TestCreated>
+    public class TestCreatedConsumer : IConsumer<Test>
     {
         private readonly ITestRepository _TestRepository;
         private readonly IProgressService _progressService;
@@ -16,9 +15,9 @@ namespace ProgressService.Consumer
             _progressService = progressService;
             _TestRepository = testRepository;
         }
-        public Task Consume(ConsumeContext<TestCreated> context)
+        public Task Consume(ConsumeContext<Test> context)
         {
-            Test test = new Test(context.Message.TestId, context.Message.Module);
+            Test test = new Test(context.Message.Id, context.Message.Module);
             _TestRepository.createTest(test);
             _progressService.CreateProgressAsync(test);
            

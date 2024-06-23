@@ -1,7 +1,7 @@
-﻿using EventLibrary;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.AspNetCore.Http.HttpResults;
 using TestService.Domain;
+using Eventlibrary;
 using TestService.DomainServices.Interfaces;
 
 namespace ProgressService.DomainServices
