@@ -24,7 +24,6 @@ builder.Services.AddDbContext<ProgramDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    //x.AddConsumer<ApplicantUpdatedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -33,19 +32,8 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
 
-        //cfg.Message<ProgramCreated>(e => { e.SetEntityName("default-exchange"); });
-        //cfg.Publish<ProgramCreated>(e => { e.ExchangeType = "topic"; });
-
-        //cfg.ReceiveEndpoint("Program-applicant-created-queue", e =>
-        //{
-        //    e.ConfigureConsumer<ApplicantUpdatedConsumer>(context);
-        //    e.Bind("default-exchange", x =>
-        //    {
-        //        x.RoutingKey = "#"; // wildcard to receive all messages
-        //        x.ExchangeType = "topic";
-        //    });
-        //});
-
+        cfg.Message<CreateProgram>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<CreateProgram>(e => { e.ExchangeType = "topic"; });
     });
 });
 

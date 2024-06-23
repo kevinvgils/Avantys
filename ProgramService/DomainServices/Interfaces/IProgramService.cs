@@ -6,6 +6,6 @@ namespace ProgramService.DomainServices.Interfaces
     {
         IEnumerable<StudyProgram> GetAllPrograms();
 
-        Task CreateProgram(StudyProgram program);
+        Task<StudyProgram> CreateProgram(StudyProgram program);
     }
 }
