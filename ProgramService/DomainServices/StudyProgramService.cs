@@ -5,12 +5,12 @@ using EventLibrary;
 
 namespace ProgramService.DomainServices
 {
-    public class ProgramService : IProgramService
+    public class StudyProgramService : IProgramService
     {
         private readonly IProgramRepository _repository;
         private readonly IBusControl _serviceBus;
 
-        public ProgramService(IProgramRepository repository, IBusControl serviceBus)
+        public StudyProgramService(IProgramRepository repository, IBusControl serviceBus)
         {
             _repository = repository;
             _serviceBus = serviceBus;
