@@ -1,18 +1,29 @@
-using EventLibrary;
 using InterviewService.Consumers;
+using InterviewService.DomainServices;
+using InterviewService.DomainServices.Interfaces;
+using InterviewService.Infrastructure;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<IConsumer<ApplicantCreated>, ApplicantCreatedConsumer>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IInterviewService, InterviewsService>();
 
+
+builder.Services.AddScoped<IInterviewRepository, InterviewRepository>();
+
+
+builder.Services.AddDbContext<InterviewDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.Services.AddMassTransit(x =>
 {
@@ -52,5 +63,11 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<InterviewDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.Run();
