@@ -32,10 +32,15 @@ namespace ApplyService.Infrastructure
 
         public async Task SaveEventAsync(DomainEvent @event)
         {
+            if (!(@event is IApplicantEvent applicantEvent))
+            {
+                throw new ArgumentException("Event does not implement IApplicantEvent", nameof(@event));
+            }
+
             var eventStore = new EventStore
             {
                 Id = Guid.NewGuid(),
-                AggregateId = (@event as ApplicantCreated).ApplicantId.ToString(),  // Example for Applicant
+                AggregateId = applicantEvent.ApplicantId.ToString(),
                 AggregateType = @event.GetType().Name,
                 EventType = @event.GetType().Name,
                 Data = JsonConvert.SerializeObject(@event),  // Use JSON serialization

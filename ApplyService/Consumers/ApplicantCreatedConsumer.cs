@@ -14,8 +14,6 @@ namespace ApplyService.Consumers
 
             applicant.ApplyEvent(@event);
 
-            Console.WriteLine("APPLYSERVICE");
-            Console.WriteLine(applicant.Name, applicant.ApplyDate, applicant.Email);
             return _applyRepository.AddApplicant(applicant);
         }
     }

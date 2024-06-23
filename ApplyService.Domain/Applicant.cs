@@ -29,7 +29,6 @@ namespace ApplyService.Domain
 
         public void ApplyEvent(DomainEvent @event) 
         {
-            Console.WriteLine(@event.ToString());
             switch (@event)
             {
                 case ApplicantCreated created:

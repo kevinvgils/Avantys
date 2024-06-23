@@ -29,7 +29,7 @@ namespace ApplyService.Controllers
             applicant.Email = application.Email;
             applicant.IsAccepted = false;
             applicant.ApplyDate = DateTime.UtcNow;
-            var createdApplicant = await _applyService.CreateApplicantyAsync(applicant);
+            var createdApplicant = await _applyService.CreateApplicantAsync(applicant);
 
             return Ok(createdApplicant);
         }

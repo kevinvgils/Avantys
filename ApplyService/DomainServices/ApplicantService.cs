@@ -7,7 +7,7 @@ namespace ApplyService.DomainServices
 {
     public class ApplicantService(IApplyRepository repo, IEventStoreRepository eventStore, IBusControl serviceBus) : IApplyService
     {
-        public async Task<Applicant> CreateApplicantyAsync(Applicant applicant)
+        public async Task<Applicant> CreateApplicantAsync(Applicant applicant)
         {
             var @event = new ApplicantCreated()
             {

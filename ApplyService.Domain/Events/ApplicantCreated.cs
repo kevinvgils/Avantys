@@ -4,7 +4,7 @@ using MassTransit;
 namespace EventLibrary
 {
     [EntityName("ApplicantCreated")]
-    public class ApplicantCreated : DomainEvent
+    public class ApplicantCreated : DomainEvent, IApplicantEvent
     {
         public string Name { get; set; }
         public string Email { get; set; }
