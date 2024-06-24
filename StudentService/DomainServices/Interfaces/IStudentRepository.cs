@@ -1,6 +1,6 @@
 ﻿using StudentService.Domain;
 
-namespace DomainServices
+namespace StudentService.DomainServices.Interfaces
 {
     public interface IStudentRepository
     {

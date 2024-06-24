@@ -2,7 +2,7 @@
 {
     public class Student
     {
-        public string Id { get; set; }
+        public Guid StudentId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public Guid? PaymentAuthId { get; set; }
@@ -16,6 +16,7 @@
             ApplicantId = applicantId;
             StudyProgram = studyProgram;
             Email = email;
+            StudentId = Guid.NewGuid();
         }
     }
 }
