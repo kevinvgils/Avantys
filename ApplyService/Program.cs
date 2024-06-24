@@ -1,4 +1,6 @@
+using ApplyService.Consumers;
 using ApplyService.DomainServices;
+using ApplyService.DomainServices.Interfaces;
 using ApplyService.Infrastructure;
 using EventLibrary;
 using MassTransit;
@@ -12,7 +14,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IApplyService, ApplicantService>();
+
+
 builder.Services.AddScoped<IApplyRepository, ApplyRepository>();
+builder.Services.AddScoped<IEventStoreRepository, EventStoreRepository>();
 
 
 builder.Services.AddDbContext<ApplyDbContext>(options =>
@@ -20,8 +26,15 @@ builder.Services.AddDbContext<ApplyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddDbContext<EventStoreDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EventStoreConnection"));
+});
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumer<ApplicantCreatedConsumer>();
+    x.AddConsumer<ApplicantUpdatedConsumer>();
+    x.AddConsumer<InterviewCreatedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -30,11 +43,25 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
 
-        cfg.Message<ApplicantCreated>(e => e.SetEntityName("applicant-created")); // specify exchange name
-        cfg.Publish<ApplicantCreated>(e => e.ExchangeType = "topic");
-    });
-});
+        cfg.Message<ApplicantCreated>(e => { e.SetEntityName("default-exchange");  });
+        cfg.Publish<ApplicantCreated>(e => { e.ExchangeType = "topic"; });
+        cfg.Message<ApplicantUpdated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<ApplicantUpdated>(e => { e.ExchangeType = "topic"; });
 
+        cfg.ReceiveEndpoint("apply-applicant-created-queue", e =>
+        {
+            e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
+            e.ConfigureConsumer<ApplicantUpdatedConsumer>(context);
+            e.ConfigureConsumer<InterviewCreatedConsumer>(context);
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+            });
+        });
+        cfg.ConfigureEndpoints(context);
+    });
+
+});
 
 
 var app = builder.Build();
@@ -58,6 +85,8 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ApplyDbContext>();
     dbContext.Database.Migrate();
+    var eventDbContext = scope.ServiceProvider.GetRequiredService<EventStoreDbContext>();
+    eventDbContext.Database.Migrate();
 }
 
 app.Run();

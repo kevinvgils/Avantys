@@ -1,5 +1,5 @@
-﻿using DomainServices;
-using StudentService.Domain;
+﻿using StudentService.Domain;
+using StudentService.DomainServices.Interfaces;
 
 namespace Infrastructure
 {

@@ -1,10 +1,10 @@
-using DomainServices;
 using EventLibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 using StudentService.Consumers;
+using StudentService.DomainServices.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
-builder.Services.AddScoped<IConsumer<ApplicantCreated>, ApplicantCreatedConsumer>();
 
 builder.Services.AddDbContext<StudentDbContext>(options =>
 {
@@ -26,7 +25,7 @@ builder.Services.AddDbContext<StudentDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<ApplicantCreatedConsumer>();
+    x.AddConsumer<ApplicantUpdatedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -34,10 +33,13 @@ builder.Services.AddMassTransit(x =>
             h.Username("guest");
             h.Password("guest");
         });
+        cfg.Message<StudentCreated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<StudentCreated>(e => { e.ExchangeType = "topic"; });
+
         cfg.ReceiveEndpoint("student-applicant-created-queue", e =>
         {
-            e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
-            e.Bind("applicant-created", x =>
+            e.ConfigureConsumer<ApplicantUpdatedConsumer>(context);
+            e.Bind("default-exchange", x =>
             {
                 x.RoutingKey = "#"; // wildcard to receive all messages
                 x.ExchangeType = "topic";
