@@ -65,10 +65,10 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
 
-  studentservice:
+  classservice:
     build:
       context: .
-      dockerfile: ./StudentService/Dockerfile
+      dockerfile: ./ClassService/Dockerfile
     ports:
       - "5003:8080"
     restart: on-failure
