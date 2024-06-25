@@ -5,10 +5,10 @@ namespace ProgressService.DomainServices.Interfaces
 {
     public interface ITestRepository
     {
-        IEnumerable<TestCreated> getAllTests();
+        IEnumerable<TestCreated> GetAllTests();
 
-        IEnumerable<TestCreated> getAllTests(IEnumerable<string> subjects);
+        IEnumerable<TestCreated> GetAllTests(IEnumerable<string> subjects);
 
-        Task<TestCreated> createTest(TestCreated Test);
+        Task<TestCreated> CreateTest(TestCreated Test);
     }
 }

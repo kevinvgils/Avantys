@@ -8,6 +8,6 @@ namespace TestService.DomainServices.Interfaces
         Task<Test> UpdateTestAsync(Test test);
         Task<Test> DeleteTestAsync(Guid testId);
 
-        Task<Test> GetAllTestsAsync();
+        Task<IEnumerable<Test>> GetAllTestsAsync();
     }
 }

@@ -13,7 +13,7 @@ namespace ProgressService.DomainServices
         {
             StudyProgram studentProgram = studyRepo.GetPrograms(student.ProgramId);
 
-            IEnumerable<TestCreated> tests = testRepo.getAllTests(studentProgram.Subjects);
+            IEnumerable<TestCreated> tests = testRepo.GetAllTests(studentProgram.Subjects);
             List<Progress> createdProgress = new List<Progress>();
 
             foreach (TestCreated test in tests)

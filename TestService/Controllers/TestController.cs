@@ -4,6 +4,7 @@ using TestService.Domain;
 using Model;
 using MassTransit;
 using TestService.DomainServices.Interfaces;
+using System.Collections;
 
 namespace TestService.Controllers
 {
@@ -27,7 +28,7 @@ namespace TestService.Controllers
         }
 
         [HttpGet]
-        public async Task<Test> getTests() => await _testService.GetAllTestsAsync();
+        public async Task<IEnumerable<Test>> getTests() => await _testService.GetAllTestsAsync();
 
         [HttpPut()]
         public async Task<IActionResult> UpdateTest(Guid testId,TestModel test)

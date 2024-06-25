@@ -1,4 +1,5 @@
-﻿using TestService.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using TestService.Domain;
 using TestService.DomainServices.Interfaces;
 
 namespace Infrastructure
@@ -23,9 +24,9 @@ namespace Infrastructure
             throw new NotImplementedException();
         }
 
-        public IEnumerable<Test> GetAllTests()
+        public async Task<IEnumerable<Test>> GetAllTests()
         {
-            return _context.Tests.ToList();
+            return await _context.Tests.ToListAsync();
         }
 
         public Test GetTest(Guid testId)

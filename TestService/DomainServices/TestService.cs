@@ -19,6 +19,14 @@ namespace ProgressService.DomainServices
 
         public async Task<Test> CreateTestAsync(Test test)
         {
+            try
+            {
+                await TestRepository.CreateTest(test);
+            }
+            catch (Exception ex) {
+                return null;
+            }
+
             TestCreated testCreated = new();
             testCreated.Id = test.Id;
             testCreated.Module = test.Module;
@@ -37,9 +45,6 @@ namespace ProgressService.DomainServices
             throw new NotImplementedException();
         }
 
-        public Task<Test> GetAllTestsAsync()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Test>> GetAllTestsAsync() => await TestRepository.GetAllTests();
     }
 }

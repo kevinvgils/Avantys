@@ -15,15 +15,32 @@ namespace ProgressService.Consumer
             _progressService = progressService;
             _TestRepository = testRepository;
         }
-        public Task Consume(ConsumeContext<TestCreated> context)
+        public async Task Consume(ConsumeContext<TestCreated> context)
         {
-            TestCreated test = new TestCreated(context.Message.Id, context.Message.Module);
-            _TestRepository.createTest(test);
-            _progressService.CreateProgressAsync(test);
-           
-            Console.WriteLine("CONSUME Test");
+            // Log the received message
+            Console.WriteLine($"Received TestCreated Event: Message={context.Message}");
 
-            return Task.CompletedTask;
+            // Create a new Test instance from the consumed message
+            TestCreated test = new TestCreated(context.Message.Id, context.Message.Module);
+
+            try
+            {
+                // Save the test using the repository
+                TestCreated returnedTest = await _TestRepository.CreateTest(test);
+
+                // Create progress for the test
+                await _progressService.CreateProgressAsync(test);
+
+                // Log the consumed event
+                Console.WriteLine($"CONSUMED TestCreated Event: Id={returnedTest.Id}, Module={returnedTest.Module}");
+            }
+            catch (Exception ex)
+            {
+                // Handle any exceptions that occur during processing
+                Console.WriteLine($"Error processing TestCreated Event: {ex.Message}");
+                // Optionally, throw the exception or handle it accordingly
+                throw;
+            }
         }
     }
 }
