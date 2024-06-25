@@ -27,7 +27,7 @@ namespace ProgressService.DomainServices
 
         public async Task<IEnumerable<Progress>> CreateProgressAsync(Test test)
         {
-            IEnumerable<Student> students = studentRepo.getAllStudents(test.Module); //TODO: Filter on module
+            IEnumerable<Student> students = studentRepo.GetAllStudents(test.Module); //TODO: Filter on module
             List<Progress> createdProgress = new List<Progress>();
 
             foreach (Student student in students)

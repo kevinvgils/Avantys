@@ -4,6 +4,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Consumer;
 using ProgressService.DomainServices.Interfaces;
+using ProgressService.Infrastructure;
 using RabbitMQ.Client;
 
 
@@ -16,6 +17,7 @@ builder.Services.AddControllers();
 //repos
 builder.Services.AddScoped<IProgressRepository, ProgressRepository>();
 builder.Services.AddScoped<ITestRepository, TestRepository>();
+builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 //service
 builder.Services.AddScoped<IProgressService, ProgressService.DomainServices.ProgressService>();
