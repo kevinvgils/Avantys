@@ -27,7 +27,7 @@ namespace ProgressService.Consumer.TestConsumers
             {
                 // Save the test using the repository
                 Test returnedTest = await _TestRepository.DeleteTest(test);
-                await _progressService.DeleteProgressAsync(new TestCreated(returnedTest.Id, null));
+                await _progressService.DeleteProgressAsync(new Test(returnedTest.Id, null));
 
                 // Log the consumed event
                 Console.WriteLine($"CONSUMED TestDeleted Event: Id={returnedTest.Id}");

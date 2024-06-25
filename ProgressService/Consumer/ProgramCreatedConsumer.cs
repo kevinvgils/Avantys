@@ -1,29 +1,29 @@
-﻿//using EventLibrary;
-//using MassTransit;
-//using ProgressService.DomainServices.Interfaces;
+﻿using EventLibrary;
+using MassTransit;
+using ProgressService.DomainServices.Interfaces;
 
-//namespace ProgressService.Consumer
-//{
-//    public class ProgramCreatedConsumer
-//    {
-//        public class StudyProgramCreatedConsumer : IConsumer<StudyProgram>
-//        {
-//            private readonly IProgramRepository _StudyProgramRepository;
+namespace ProgressService.Consumer
+{
+    public class ProgramCreatedConsumer
+    {
+        public class StudyProgramCreatedCreatedConsumer : IConsumer<StudyProgramCreated>
+        {
+            private readonly IProgramRepository _StudyProgramCreatedRepository;
 
-//            public StudyProgramCreatedConsumer(IProgramRepository StudyProgramRepository)
-//            {
-//                _StudyProgramRepository = StudyProgramRepository;
-//            }
+            public StudyProgramCreatedCreatedConsumer(IProgramRepository StudyProgramCreatedRepository)
+            {
+                _StudyProgramCreatedRepository = StudyProgramCreatedRepository;
+            }
 
-//            public Task Consume(ConsumeContext<StudyProgram> context)
-//            {
-//                StudyProgram StudyProgram = new StudyProgram();
-//                _StudyProgramRepository.CreateProgram(StudyProgram);
+            public Task Consume(ConsumeContext<StudyProgramCreated> context)
+            {
+                StudyProgramCreated StudyProgramCreated = new StudyProgramCreated();
+                _StudyProgramCreatedRepository.CreateProgram(StudyProgramCreated);
 
-//                Console.WriteLine("CONSUME StudyProgram");
+                Console.WriteLine("CONSUME StudyProgramCreated");
 
-//                return Task.CompletedTask;
-//            }
-//        }
-//    }
-//}
+                return Task.CompletedTask;
+            }
+        }
+    }
+}

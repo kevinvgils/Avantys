@@ -29,7 +29,7 @@ namespace ProgressService.Consumer.TestConsumers
                 Test returnedTest = await _TestRepository.CreateTest(test);
 
                 // Create progress for the test
-                await _progressService.CreateProgressAsync(test);
+                await _progressService.CreateProgressAsync(returnedTest);
 
                 // Log the consumed event
                 Console.WriteLine($"CONSUMED TestCreated Event: Id={returnedTest.Id}, Module={returnedTest.Module}");

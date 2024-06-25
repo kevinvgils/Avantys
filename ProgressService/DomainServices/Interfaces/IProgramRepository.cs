@@ -1,4 +1,5 @@
-﻿using ProgressService.Domain;
+﻿using EventLibrary;
+using ProgressService.Domain;
 
 namespace ProgressService.DomainServices.Interfaces
 {
@@ -8,6 +9,6 @@ namespace ProgressService.DomainServices.Interfaces
 
         StudyProgram GetPrograms(Guid programId);
 
-        Task<StudyProgram> CreateProgram(StudyProgram Program);
+        Task<StudyProgram> CreateProgram(StudyProgramCreated Program);
     }
 }

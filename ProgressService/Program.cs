@@ -2,7 +2,7 @@ using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Consumer;
-using ProgressService.Consumer.Test;
+using ProgressService.Consumer.TestConsumers;
 using ProgressService.DomainServices.Interfaces;
 using ProgressService.Infrastructure;
 using EventLibrary;

@@ -1,5 +1,6 @@
 ﻿using EventLibrary;
 using Infrastructure;
+using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
 using System.Collections.Immutable;
 
@@ -14,10 +15,11 @@ namespace ProgressService.Infrastructure
             _context = context;
         }
 
-        public async Task<StudyProgram> CreateProgram(StudyProgram Program)
+        public async Task<StudyProgram> CreateProgram(StudyProgramCreated Program)
         {
-            await _context.StudyPrograms.AddAsync(Program);
-            return Program;
+            StudyProgram programToAdd = new StudyProgram(Program.StudyProgramId, Program.Name, Program.Subjects);
+            await _context.StudyPrograms.AddAsync(programToAdd);
+            return programToAdd;
         }
 
         public IEnumerable<StudyProgram> GetAllPrograms()
@@ -27,7 +29,7 @@ namespace ProgressService.Infrastructure
 
         public StudyProgram GetPrograms(Guid programId)
         {
-            return _context.StudyPrograms.FirstOrDefault(x => x.StudyProgramId == programId);
+            return _context.StudyPrograms.FirstOrDefault(x => x.Id == programId);
         }
     }
 }

@@ -19,10 +19,11 @@ namespace Infrastructure
         }
 
 
-        public async Task<Student> CreateStudent(Student Student)
+        public async Task<Student> CreateStudent(StudentCreated Student)
         {
-            await _context.Students.AddAsync(Student);
-            return Student;
+            Student studentToAdd = new Student(Student.StudentId, Student.StudyProgramId);
+            await _context.Students.AddAsync(studentToAdd);
+            return studentToAdd;
         }
 
         public IEnumerable<Student> GetAllStudents()

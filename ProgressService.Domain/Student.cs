@@ -11,6 +11,8 @@ namespace ProgressService.Domain
         public Guid Id { get; set; }
         public Guid ProgramId { get; set; }
         
+        public Student() { }
+
         public Student(Guid id, Guid programId)
         {
             Id = id;
