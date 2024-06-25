@@ -5,10 +5,10 @@ namespace ProgressService.DomainServices.Interfaces
 {
     public interface IStudentRepository
     {
-        IEnumerable<Student> getAllStudents();
+        IEnumerable<Student> GetAllStudents();
 
-        IEnumerable<Student> getAllStudents(string module);
+        IEnumerable<Student> GetAllStudents(string module);
 
-        Task<Student> createStudent(Student Student);
+        Task<Student> CreateStudent(Student Student);
     }
 }

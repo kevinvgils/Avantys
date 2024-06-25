@@ -19,20 +19,20 @@ namespace Infrastructure
         }
 
 
-        public async Task<Student> createStudent(Student Student)
+        public async Task<Student> CreateStudent(Student Student)
         {
             await _context.Students.AddAsync(Student);
             return Student;
         }
 
-        public IEnumerable<Student> getAllStudents()
+        public IEnumerable<Student> GetAllStudents()
         {
             return _context.Students.ToImmutableArray();
         }
 
         public IEnumerable<Student> GetAllStudents(string module)
         {
-            IEnumerable<Student> students = getAllStudents(); // Assuming GetAllStudents() retrieves all students
+            IEnumerable<Student> students = GetAllStudents(); // Assuming GetAllStudents() retrieves all students
 
             // Filter students based on the module condition
             return students.Where(student =>
