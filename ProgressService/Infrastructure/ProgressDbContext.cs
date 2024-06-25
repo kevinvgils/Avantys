@@ -1,4 +1,4 @@
-﻿using Eventlibrary;
+﻿using EventLibrary;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Domain;
 

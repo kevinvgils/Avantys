@@ -1,4 +1,4 @@
-﻿using Eventlibrary;
+﻿using EventLibrary;
 using ProgressService.Domain;
 
 namespace ProgressService.DomainServices.Interfaces

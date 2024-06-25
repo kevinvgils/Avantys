@@ -1,5 +1,5 @@
 ﻿using ProgressService.Domain;
-using Eventlibrary;
+using EventLibrary;
 
 namespace ProgressService.DomainServices.Interfaces
 {

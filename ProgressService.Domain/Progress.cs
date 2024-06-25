@@ -1,4 +1,4 @@
-﻿using Eventlibrary;
+﻿using EventLibrary;
 
 namespace ProgressService.Domain
 {

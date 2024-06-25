@@ -1,4 +1,4 @@
-﻿using Eventlibrary;
+﻿using EventLibrary;
 using MassTransit;
 using ProgressService.DomainServices.Interfaces;
 

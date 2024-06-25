@@ -1,4 +1,4 @@
-using Eventlibrary;
+using EventLibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;

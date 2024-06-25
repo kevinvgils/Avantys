@@ -1,4 +1,4 @@
-﻿using Eventlibrary;
+﻿using EventLibrary;
 using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
 using System.Collections.Immutable;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Eventlibrary
+namespace EventLibrary
 {
     [EntityName("StudentCreated")]
     public class Student

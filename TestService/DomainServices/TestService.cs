@@ -1,7 +1,7 @@
 ﻿using MassTransit;
 using Microsoft.AspNetCore.Http.HttpResults;
 using TestService.Domain;
-using Eventlibrary;
+using EventLibrary;
 using TestService.DomainServices.Interfaces;
 
 namespace ProgressService.DomainServices
@@ -23,7 +23,7 @@ namespace ProgressService.DomainServices
             testCreated.Id = test.Id;
             testCreated.Module = test.Module;
 
-            await _bus.Publish(test);
+            await _bus.Publish(testCreated);
             return test;
         }
 
