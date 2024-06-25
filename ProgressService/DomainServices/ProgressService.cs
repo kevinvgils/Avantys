@@ -7,11 +7,13 @@ using System.Linq;
 
 namespace ProgressService.DomainServices
 {
-    public class ProgressService(IProgressRepository repo, ITestRepository testRepo, IStudentRepository studentRepo) : IProgressService
+    public class ProgressService(IProgressRepository repo, ITestRepository testRepo, IStudentRepository studentRepo, IProgramRepository studyRepo) : IProgressService
     {
         public async Task<IEnumerable<Progress>> CreateProgressAsync(Student student)
         {
-            IEnumerable<Test> tests = testRepo.getAllTests(); //TODO: Filter on module
+            StudyProgram studentProgram = studyRepo.GetPrograms(student.ProgramId);
+
+            IEnumerable<Test> tests = testRepo.getAllTests(studentProgram.Subjects);
             List<Progress> createdProgress = new List<Progress>();
 
             foreach (Test test in tests)
@@ -25,7 +27,7 @@ namespace ProgressService.DomainServices
 
         public async Task<IEnumerable<Progress>> CreateProgressAsync(Test test)
         {
-            IEnumerable<Student> students = studentRepo.getAllStudents(); //TODO: Filter on module
+            IEnumerable<Student> students = studentRepo.getAllStudents(test.Module); //TODO: Filter on module
             List<Progress> createdProgress = new List<Progress>();
 
             foreach (Student student in students)

@@ -24,5 +24,10 @@ namespace ProgressService.Infrastructure
         {
             return _context.StudyPrograms.ToImmutableArray();
         }
+
+        public StudyProgram GetPrograms(Guid programId)
+        {
+            return _context.StudyPrograms.FirstOrDefault(x => x.StudyProgramId == programId);
+        }
     }
 }

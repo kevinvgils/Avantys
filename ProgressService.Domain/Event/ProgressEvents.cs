@@ -11,8 +11,13 @@ namespace Eventlibrary
     public class Student
     {
         public Guid Id { get; set; }
+        public Guid ProgramId { get; set; }
 
-        public Student(Guid id) => Id = id;
+        public Student(Guid id, Guid programId)
+        {
+            Id = id;
+            ProgramId = programId;
+        }
     }
 
     [EntityName("TestCreated")]

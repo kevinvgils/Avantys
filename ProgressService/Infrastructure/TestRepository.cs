@@ -26,5 +26,12 @@ namespace Infrastructure
         {
             return _context.Tests.ToImmutableArray();
         }
+
+        public IEnumerable<Test> getAllTests(IEnumerable<string> subjects)
+        {
+            return _context.Tests
+                   .Where(test => subjects.Contains(test.Module))
+                   .ToImmutableArray();
+        }
     }
 }
