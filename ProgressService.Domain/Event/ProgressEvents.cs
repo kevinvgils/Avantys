@@ -20,19 +20,6 @@ namespace Eventlibrary
         }
     }
 
-    [EntityName("TestCreated")]
-    public class Test
-    {
-        public Guid Id { get; set; }
-        public string Module { get; set; }
-
-        public Test(Guid id, string module)
-        {
-            Id = id;
-            Module = module;
-        }
-    }
-
     [EntityName("StudyProgramCreated")]
     public class StudyProgram
     {

@@ -9,22 +9,37 @@ namespace ProgressService.DomainServices
     public class TestService : ITestService
     {
         public ITestRepository TestRepository { get; set; }
-        public IBusControl BusControl { get; set; }
+        public IBus _bus { get; set; }
 
-        public TestService(ITestRepository repo, IBusControl serviceBus)
+        public TestService(ITestRepository repo, IBus serviceBus)
         {
             TestRepository = repo;
-            BusControl = serviceBus;
+            _bus = serviceBus;
         }
 
         public async Task<Test> CreateTestAsync(Test test)
         {
             TestCreated testCreated = new();
-            testCreated.TestId = test.Id;
+            testCreated.Id = test.Id;
             testCreated.Module = test.Module;
 
-            await BusControl.Publish(test);
+            await _bus.Publish(test);
             return test;
+        }
+
+        public Task<Test> UpdateTestAsync(Test test)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Test> DeleteTestAsync(Guid testId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Test> GetAllTestsAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }

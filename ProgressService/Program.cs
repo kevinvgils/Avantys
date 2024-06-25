@@ -14,27 +14,31 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+//====================Injection=========================
 //repos
 builder.Services.AddScoped<IProgressRepository, ProgressRepository>();
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
 //service
 builder.Services.AddScoped<IProgressService, ProgressService.DomainServices.ProgressService>();
 
-builder.Services.AddScoped<IConsumer<Test>, TestCreatedConsumer>(); //TODO: remove TestCreated and replace it with local.
+//consumers
+builder.Services.AddScoped<IConsumer<TestCreated>, TestCreatedConsumer>();
 
+//dbContext
 builder.Services.AddDbContext<ProgressDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
+//=====================================================
 
 
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<TestCreatedConsumer>();
-    x.AddConsumer<StudentCreatedConsumer>(); // Add StudentCreatedConsumer
+    x.AddConsumer<StudentCreatedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -44,26 +48,18 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
 
-        // Configure endpoints for consumers
-        cfg.ReceiveEndpoint("test-created-queue", e =>
+        cfg.ReceiveEndpoint("Progressservice-queue", e =>
         {
             e.ConfigureConsumer<TestCreatedConsumer>(context);
-            e.Bind("test-created", x =>
+            e.ConfigureConsumer<StudentCreatedConsumer>(context);
+            e.Bind("default-exchange", x =>
             {
-                x.RoutingKey = "#"; // wildcard to receive all messages
                 x.ExchangeType = "topic";
+                x.RoutingKey = "#";
             });
         });
 
-        cfg.ReceiveEndpoint("student-created-queue", e =>
-        {
-            e.ConfigureConsumer<StudentCreatedConsumer>(context);
-            e.Bind("student-created", x =>
-            {
-                x.RoutingKey = "#"; // wildcard to receive all messages
-                x.ExchangeType = "topic";
-            });
-        });
+        cfg.ConfigureEndpoints(context);
     });
 });
 
@@ -91,4 +87,5 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.Migrate();
 }
 
+Console.WriteLine("Test startup!");
 app.Run();

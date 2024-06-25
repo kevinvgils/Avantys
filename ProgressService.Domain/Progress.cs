@@ -26,7 +26,7 @@ namespace ProgressService.Domain
             Grade = grade;
             StudyPoints = studyPoints;
         }
-        public Progress(Test test, Student student) : this()
+        public Progress(TestCreated test, Student student) : this()
         {
             TestId = test.Id;
             StudentId = student.Id;

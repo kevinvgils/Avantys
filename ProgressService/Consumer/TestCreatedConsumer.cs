@@ -5,7 +5,7 @@ using Eventlibrary;
 
 namespace ProgressService.Consumer
 {
-    public class TestCreatedConsumer : IConsumer<Test>
+    public class TestCreatedConsumer : IConsumer<TestCreated>
     {
         private readonly ITestRepository _TestRepository;
         private readonly IProgressService _progressService;
@@ -15,9 +15,9 @@ namespace ProgressService.Consumer
             _progressService = progressService;
             _TestRepository = testRepository;
         }
-        public Task Consume(ConsumeContext<Test> context)
+        public Task Consume(ConsumeContext<TestCreated> context)
         {
-            Test test = new Test(context.Message.Id, context.Message.Module);
+            TestCreated test = new TestCreated(context.Message.Id, context.Message.Module);
             _TestRepository.createTest(test);
             _progressService.CreateProgressAsync(test);
            

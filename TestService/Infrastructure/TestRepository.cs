@@ -12,18 +12,28 @@ namespace Infrastructure
             _context = context;
         }
 
-        public async Task createTest(Test test)
+        public async Task CreateTest(Test test)
         {
             _context.Tests.Add(test);
             await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<Test> getAllTests()
+        public Task DeleteTest(Guid testId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Test> GetAllTests()
         {
             return _context.Tests.ToList();
         }
 
-        public Test getTest()
+        public Test GetTest(Guid testId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateTest(Test test)
         {
             throw new NotImplementedException();
         }

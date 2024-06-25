@@ -11,8 +11,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+//repo
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 
+//service
+builder.Services.AddScoped<ITestService, ProgressService.DomainServices.TestService>();
+
+//dbContext
 builder.Services.AddDbContext<TestDbContext>(options =>
 {
     options.UseSqlServer(
@@ -30,8 +35,8 @@ builder.Services.AddMassTransit(x =>
             h.Password("guest");
         });
 
-        cfg.Message<TestCreated>(e => e.SetEntityName("test-created")); // specify exchange name
-        cfg.Publish<TestCreated>(e => e.ExchangeType = "topic");
+        cfg.Message<TestCreated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<TestCreated>(e => { e.ExchangeType = "topic"; });
     });
 });
 

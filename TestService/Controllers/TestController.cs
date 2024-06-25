@@ -25,5 +25,22 @@ namespace TestService.Controllers
             Test createdTest = new Test(test.Module, test.TestDate, test.TeacherId, test.ProctorId);
             return Ok(await _testService.CreateTestAsync(createdTest));
         }
+
+        [HttpGet]
+        public async Task<Test> getTests() => await _testService.GetAllTestsAsync();
+
+        [HttpPut()]
+        public async Task<IActionResult> UpdateTest(Guid testId,TestModel test)
+        {
+            Test createdTest = new Test(test.Module, test.TestDate, test.TeacherId, test.ProctorId);
+            createdTest.Id = testId;
+            return Ok(await _testService.UpdateTestAsync(createdTest));
+        }
+
+        [HttpDelete()]
+        public async Task<IActionResult> DeleteTest(Guid testId)
+        {
+            return Ok(await _testService.DeleteTestAsync(testId));
+        }
     }
 }

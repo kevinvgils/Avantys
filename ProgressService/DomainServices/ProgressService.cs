@@ -13,10 +13,10 @@ namespace ProgressService.DomainServices
         {
             StudyProgram studentProgram = studyRepo.GetPrograms(student.ProgramId);
 
-            IEnumerable<Test> tests = testRepo.getAllTests(studentProgram.Subjects);
+            IEnumerable<TestCreated> tests = testRepo.getAllTests(studentProgram.Subjects);
             List<Progress> createdProgress = new List<Progress>();
 
-            foreach (Test test in tests)
+            foreach (TestCreated test in tests)
             {
                 Progress progress = new Progress(test.Id, student.Id, test.Module, null, null);
                 createdProgress.Add(await repo.createProgress(progress));
@@ -25,7 +25,7 @@ namespace ProgressService.DomainServices
             return createdProgress;
         }
 
-        public async Task<IEnumerable<Progress>> CreateProgressAsync(Test test)
+        public async Task<IEnumerable<Progress>> CreateProgressAsync(TestCreated test)
         {
             IEnumerable<Student> students = studentRepo.GetAllStudents(test.Module); //TODO: Filter on module
             List<Progress> createdProgress = new List<Progress>();

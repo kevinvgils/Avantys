@@ -16,18 +16,18 @@ namespace Infrastructure
         }
 
 
-        public async Task<Test> createTest(Test Test)
+        public async Task<TestCreated> createTest(TestCreated Test)
         {
             await _context.Tests.AddAsync(Test);
             return Test;
         }
 
-        public IEnumerable<Test> getAllTests()
+        public IEnumerable<TestCreated> getAllTests()
         {
             return _context.Tests.ToImmutableArray();
         }
 
-        public IEnumerable<Test> getAllTests(IEnumerable<string> subjects)
+        public IEnumerable<TestCreated> getAllTests(IEnumerable<string> subjects)
         {
             return _context.Tests
                    .Where(test => subjects.Contains(test.Module))
