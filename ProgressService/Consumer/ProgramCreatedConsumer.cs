@@ -6,11 +6,11 @@ namespace ProgressService.Consumer
 {
     public class ProgramCreatedConsumer
     {
-        public class StudyProgramCreatedCreatedConsumer : IConsumer<StudyProgramCreated>
+        public class StudyProgramCreatedConsumer : IConsumer<StudyProgramCreated>
         {
             private readonly IProgramRepository _StudyProgramCreatedRepository;
 
-            public StudyProgramCreatedCreatedConsumer(IProgramRepository StudyProgramCreatedRepository)
+            public StudyProgramCreatedConsumer(IProgramRepository StudyProgramCreatedRepository)
             {
                 _StudyProgramCreatedRepository = StudyProgramCreatedRepository;
             }

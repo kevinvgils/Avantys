@@ -7,6 +7,7 @@ using ProgressService.DomainServices.Interfaces;
 using ProgressService.Infrastructure;
 using EventLibrary;
 using RabbitMQ.Client;
+using static ProgressService.Consumer.ProgramCreatedConsumer;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +39,8 @@ builder.Services.AddDbContext<ProgressDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    
+    x.AddConsumer<StudyProgramCreatedConsumer>();
+
     x.AddConsumer<StudentCreatedConsumer>();
 
     x.AddConsumer<TestCreatedConsumer>();
@@ -59,6 +61,8 @@ builder.Services.AddMassTransit(x =>
             e.ConfigureConsumer<TestUpdatedConsumer>(context);
 
             e.ConfigureConsumer<StudentCreatedConsumer>(context);
+
+            e.ConfigureConsumer<StudyProgramCreatedConsumer>(context);
 
             e.Bind("default-exchange", x =>
             {
