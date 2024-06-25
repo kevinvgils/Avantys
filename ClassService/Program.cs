@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
 using ClassService.Consumers;
 using ClassService.DomainServices.Interfaces;
+using DomainServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,13 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IStudyProgramRepository, StudyProgramRepository>();
+builder.Services.AddScoped<IClassRepository, ClassRepostitory>();
+
+builder.Services.AddScoped<IStudentService, StudentsService>();
+builder.Services.AddScoped<IStudyProgramService, StudyProgramService>();
+builder.Services.AddScoped<IClassService, ClassesService>();
+
 
 builder.Services.AddDbContext<ClassDbContext>(options =>
 {
@@ -25,7 +33,9 @@ builder.Services.AddDbContext<ClassDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<ApplicantUpdatedConsumer>();
+    x.AddConsumer<StudyProgramConsumer>();
+    x.AddConsumer<StudentConsumer>();
+    x.AddConsumer<ClassConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -37,10 +47,14 @@ builder.Services.AddMassTransit(x =>
         cfg.Publish<StudentCreated>(e => { e.ExchangeType = "topic"; });
         cfg.Message<StudyProgramCreated>(e => { e.SetEntityName("default-exchange"); });
         cfg.Publish<StudyProgramCreated>(e => { e.ExchangeType = "topic"; });
+        cfg.Message<ClassCreated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<ClassCreated>(e => { e.ExchangeType = "topic"; });
 
-        cfg.ReceiveEndpoint("student-applicant-created-queue", e =>
+        cfg.ReceiveEndpoint("classservice-queue", e =>
         {
-            e.ConfigureConsumer<ApplicantUpdatedConsumer>(context);
+            e.ConfigureConsumer<StudyProgramConsumer>(context);
+            e.ConfigureConsumer<StudentConsumer>(context);
+            e.ConfigureConsumer<ClassConsumer>(context);
             e.Bind("default-exchange", x =>
             {
                 x.RoutingKey = "#"; // wildcard to receive all messages

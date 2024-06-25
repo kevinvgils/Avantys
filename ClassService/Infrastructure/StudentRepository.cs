@@ -1,5 +1,6 @@
 ﻿using ClassService.Domain;
 using ClassService.DomainServices.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure
 {
@@ -18,9 +19,30 @@ namespace Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public Student GetStudent()
+        public async Task<List<Student>> GetAllStudents()
         {
-            return _context.Students.SingleOrDefault();
+            var students = _context.Students.ToList();
+            return students;
         }
+
+        public async Task<Student> GetStudent(Guid studentId)
+        {
+            return await _context.Students.FindAsync(studentId);
+        }
+
+        public async Task UpdateStudent(Student updatedStudent)
+        {
+            // Ensure the student exists in the database
+            var existingStudent = await _context.Students.FindAsync(updatedStudent.StudentId);
+            if (existingStudent == null)
+            {
+                throw new KeyNotFoundException("Student not found.");
+            }
+
+            _context.Entry(existingStudent).CurrentValues.SetValues(updatedStudent);
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

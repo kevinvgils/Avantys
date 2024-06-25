@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ClassService.Domain;
 using ClassService.DomainServices.Interfaces;
+using ClassService.Models;
 
 namespace ClassService.Controllers
 {
@@ -8,23 +9,50 @@ namespace ClassService.Controllers
     [Route("api/[controller]")]
     public class StudentController : ControllerBase
     {
-        private readonly IStudentRepository _studentRepository;
+        private readonly IStudentService _studentService;
 
-        public StudentController(IStudentRepository studentRepository)
+        public StudentController(IStudentService studentService)
         {
-            _studentRepository = studentRepository;
+            _studentService = studentService;
         }
 
         [HttpGet]
-        public Student GetStudent()
+        public async Task<IActionResult> GetAllStudents()
         {
-            return _studentRepository.GetStudent();
+            var students = await _studentService.GetAllStudentsAsync();
+
+            var studentModels = ToStudentModels(students);
+
+            return Ok(studentModels);
         }
 
-        [HttpPut]
-        public Student AddStudentToProgram()
+        [HttpPut("{id}")]
+        public async Task<IActionResult> AssignStudentToClass(Guid id, [FromBody]StudentAssignModel studentAssignModel)
         {
-            return _studentRepository.GetStudent();
+            var studentToUpdate = await _studentService.GetStudentByIdAsync(id);
+            studentToUpdate.ClassId = studentAssignModel.ClassId;
+            var updatedStudent = await _studentService.AssignStudentToClassAsync(studentToUpdate);
+
+            var student = ToStudentModel(updatedStudent);
+
+            return Ok(student);
         }
+
+        private StudentModel ToStudentModel(Student student)
+        {
+            return new StudentModel
+            {
+                StudentId = student.StudentId.ToString().ToUpper(),
+                ClassId = student.ClassId.ToString().ToUpper(),
+                Name = student.Name,
+                Email = student.Email,
+                StudyProgramId = student.StudyProgramId.ToString().ToUpper()
+            };
+        }
+        private IEnumerable<StudentModel> ToStudentModels(IEnumerable<Student> students)
+        {
+            return students.Select(s => ToStudentModel(s)).ToList();
+        }
+
     }
 }

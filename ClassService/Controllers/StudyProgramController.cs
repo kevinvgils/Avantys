@@ -1,18 +1,31 @@
 using Microsoft.AspNetCore.Mvc;
 using ClassService.Domain;
 using ClassService.DomainServices.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
+using ClassService.Models;
 
 namespace ClassService.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ClassController : ControllerBase
+    public class StudyProgramController : ControllerBase
     {
-        private readonly IStudentRepository _studentRepository;
+        private readonly IStudyProgramService _studyProgramService;
 
-        public ClassController(IStudentRepository studentRepository)
+        public StudyProgramController(IStudyProgramService studyProgramService)
         {
-            _studentRepository = studentRepository;
+            _studyProgramService = studyProgramService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateStudyProgramAsync(StudyProgramModel newStudyProgram)
+        {
+            var studyProgram = new StudyProgram();
+            studyProgram.Name = newStudyProgram.Name;
+            studyProgram.Subjects = newStudyProgram.Subjects;
+            var createdStudyProgram = await _studyProgramService.CreateStudyProgramAsync(studyProgram);
+
+            return Ok(createdStudyProgram);
         }
 
     }

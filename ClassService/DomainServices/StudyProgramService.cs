@@ -21,12 +21,14 @@ namespace DomainServices
         {
             var studyProgramCreated = new StudyProgramCreated()
             {
-                StudyProgramId = studyProgram.StudyProgramId,
+                StudyProgramId = Guid.NewGuid(),
                 Subjects = studyProgram.Subjects,
                 Name = studyProgram.Name,
             };
 
             await _serviceBus.Publish(studyProgramCreated);
+
+            studyProgram.StudyProgramId = studyProgramCreated.StudyProgramId;
 
             return studyProgram;
         }
