@@ -1,11 +1,11 @@
+using LectureService.Consumers;
 using LectureService.DomainServices;
-using EventLibrary;
+using LectureService.DomainServices.Interfaces;
 using LectureService.Infrastructure;
+using EventLibrary;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
-//using LectureService.Consumers;
-
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -14,39 +14,53 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<ILectureService, LectureService.DomainServices.LectureService>();
+
+
 builder.Services.AddScoped<ILectureRepository, LectureRepository>();
 builder.Services.AddScoped<IStudyMaterialRepository, StudyMaterialRepository>();
-//builder.Services.AddScoped<IConsumer<ApplicantCreated>, ApplicantCreatedConsumer>();
+builder.Services.AddScoped<IEventStoreRepository, EventStoreRepository>();
+
 
 builder.Services.AddDbContext<LectureDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddDbContext<EventStoreDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("EventStoreConnection"));
+});
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<LectureCreatedConsumer>();
+    x.AddConsumer<StudyMaterialCreatedConsumer>();
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
 
+        cfg.Message<LectureCreated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<LectureCreated>(e => { e.ExchangeType = "topic"; });
+        cfg.Message<StudyMaterialCreated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<StudyMaterialCreated>(e => { e.ExchangeType = "topic"; });
 
-//builder.Services.AddMassTransit(x =>
-//{
-//    x.AddConsumer<ApplicantCreatedConsumer>();
-//    x.UsingRabbitMq((context, cfg) =>
-//    {
-//        cfg.Host("rabbitmq", "/", h =>
-//        {
-//            h.Username("guest");
-//            h.Password("guest");
-//        });
-//        cfg.ReceiveEndpoint("Progress-applicant-created-queue", e =>
-//        {
-//            e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
-//            e.Bind("applicant-created", x =>
-//            {
-//                x.RoutingKey = "#"; // wildcard to receive all messages
-//                x.ExchangeType = "topic";
-//            });
-//        });
+        cfg.ReceiveEndpoint("lecture-created-queue", e =>
+        {
+            e.ConfigureConsumer<LectureCreatedConsumer>(context);
+            e.ConfigureConsumer<StudyMaterialCreatedConsumer>(context);
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+            });
+        });
+        cfg.ConfigureEndpoints(context);
+    });
 
-//    });
-//});
+});
 
 
 var app = builder.Build();
@@ -70,6 +84,8 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<LectureDbContext>();
     dbContext.Database.Migrate();
+    var eventDbContext = scope.ServiceProvider.GetRequiredService<EventStoreDbContext>();
+    eventDbContext.Database.Migrate();
 }
 
 app.Run();

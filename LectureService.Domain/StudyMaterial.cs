@@ -1,14 +1,26 @@
-﻿namespace LectureService.Domain
+﻿using EventLibrary;
+
+namespace LectureService.Domain
 {
     public class StudyMaterial
     {
-        public Guid Id { get; set; }
+        public Guid StudyMaterialId { get; set; }
         public string Content { get; set; }
 
-        public StudyMaterial(Guid id, string content)
+        private void StudyMaterialEvent(StudyMaterialCreated @event)
         {
-            Id = id;
-            Content = content;
+            StudyMaterialId = @event.StudyMaterialId;
+            Content = @event.Content;
+        }
+
+        public void StudyMaterialEvent(DomainEvent @event)
+        {
+            switch (@event)
+            {
+                case StudyMaterialCreated created:
+                    StudyMaterialEvent(created);
+                    break;
+            }
         }
     }
 }

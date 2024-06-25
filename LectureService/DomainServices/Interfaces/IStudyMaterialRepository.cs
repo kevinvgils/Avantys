@@ -1,6 +1,6 @@
 ﻿using LectureService.Domain;
 
-namespace LectureService.DomainServices
+namespace LectureService.DomainServices.Interfaces
 {
     public interface IStudyMaterialRepository
     {

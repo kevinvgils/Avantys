@@ -1,7 +1,7 @@
 ﻿using LectureService.Domain;
 using System.Runtime.InteropServices;
 
-namespace LectureService.DomainServices
+namespace LectureService.DomainServices.Interfaces
 {
     public interface ILectureRepository
     {
@@ -9,14 +9,10 @@ namespace LectureService.DomainServices
 
         Task<Lecture> GetLectureById(Guid lectureId);
 
-        Task UpdateLecture(Lecture lecture);
-
-        Task AddTeacher(Guid teacherId, Guid lectureId);
-
-        Guid GetTeacher();
+        Task<List<Lecture>> GetAllLecturesAsync();
 
         Task AddClass(Guid classId, Guid lectureId);
 
-        Guid GetClass();
+        Task<Guid?> GetClass(Guid lectureId);
     }
 }

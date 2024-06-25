@@ -1,9 +1,9 @@
 ﻿using LectureService.Domain;
-using LectureService.DomainServices;
 using LectureService.Models;
 using EventLibrary;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using LectureService.DomainServices.Interfaces;
 
 namespace LectureService.Controllers
 {
@@ -12,38 +12,56 @@ namespace LectureService.Controllers
     public class LectureController : ControllerBase
     {
         private readonly IBus _IBus;
-        private readonly ILectureRepository _lectureRepository;
-        private readonly IStudyMaterialRepository _studyMaterialRepository;
+        private readonly ILectureService _lectureService;
 
-        public LectureController(IBus bus, ILectureRepository lectureRepository, IStudyMaterialRepository studyMaterialRepository)
+        public LectureController(IBus bus, ILectureService lectureService)
         {
             _IBus = bus;
-            _lectureRepository = lectureRepository;
-            _studyMaterialRepository = studyMaterialRepository;
+            _lectureService = lectureService;
         }
 
-        [HttpPost("schedule-teacher")]
-        public async Task<IActionResult> ScheduleTeacher(Guid teacherId, Guid lectureId, DateTime startTime, DateTime endTime)
+        [HttpPost("create-lecture")]
+        public async Task<IActionResult> CreateLecture(ILecture _lecture)
         {
             try
             {
-                await _lectureRepository.AddTeacher(teacherId, lectureId);
-                var lecture = await _lectureRepository.GetLectureById(lectureId);
-                if (lecture == null)
-                {
-                    return NotFound("Lecture not found");
-                }
+                var lecture = new Lecture();
+                lecture.Location = _lecture.Location;
+                lecture.StartTime = _lecture.StartTime;
+                lecture.EndTime = _lecture.EndTime;
+                lecture.Teacher = _lecture.Teacher;
+                var createdLecture = await _lectureService.CreateLectureAsync(lecture);
 
-                lecture.StartTime = startTime;
-                lecture.EndTime = endTime;
-                await _lectureRepository.UpdateLecture(lecture);
-
-                return Ok();
+                return Ok(createdLecture);
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("create-studymaterial")]
+        public async Task<IActionResult> CreateStudyMaterial(IStudyMaterial _studyMaterial)
+        {
+            try
+            {
+                var studyMaterial = new StudyMaterial();
+                studyMaterial.Content = studyMaterial.Content;
+                var createdStudyMaterial = await _lectureService.CreateStudyMaterialAsync(studyMaterial);
+
+                return Ok(createdStudyMaterial);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Lecture>>> GetAllLectures()
+        {
+            var lectures = await _lectureService.GetAllLecturesAsync();
+            return Ok(lectures);
         }
 
         [HttpPost("assign-class")]
@@ -51,7 +69,7 @@ namespace LectureService.Controllers
         {
             try
             {
-                await _lectureRepository.AddClass(classId, lectureId);
+                await _lectureService.AddClass(classId, lectureId);
 
                 return Ok();
             }
@@ -66,9 +84,9 @@ namespace LectureService.Controllers
         {
             try
             {
-               await _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
+               await _lectureService.AddStudyMaterial(studyMaterial, lectureId);
                
-                return Ok();
+               return Ok();
             }
             catch (ArgumentException ex)
             {

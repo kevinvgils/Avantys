@@ -5,5 +5,6 @@
         string Location { get; set; }
         DateTime StartTime { get; set; }
         DateTime EndTime { get; set; }
+        string Teacher { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using LectureService.Domain;
-using LectureService.DomainServices;
+using LectureService.DomainServices.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LectureService.Infrastructure
@@ -21,36 +21,17 @@ namespace LectureService.Infrastructure
 
         public async Task<Lecture> GetLectureById(Guid lectureId)
         {
-            return await _context.Lectures.FirstOrDefaultAsync(l => l.Id == lectureId);
+            return await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
         }
 
-        public async Task UpdateLecture(Lecture lecture)
+        public async Task<List<Lecture>> GetAllLecturesAsync()
         {
-            _context.Lectures.Update(lecture);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task AddTeacher(Guid teacherId, Guid lectureId)
-        {
-            var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.Id == lectureId);
-            if (lecture == null)
-            {
-                throw new ArgumentException($"Lecture with ID {lectureId} not found.");
-            }
-
-            lecture.TeacherId = teacherId;
-            _context.Lectures.Update(lecture);
-            await _context.SaveChangesAsync();
-        }
-
-        public Guid GetTeacher()
-        {
-            return _context.Lectures.FirstOrDefault().TeacherId;
+            return await _context.Lectures.ToListAsync();
         }
 
         public async Task AddClass(Guid classId, Guid lectureId)
         {
-            var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.Id == lectureId);
+            var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
             if (lecture == null)
             {
                 throw new ArgumentException($"Lecture with ID {lectureId} not found.");
@@ -61,9 +42,10 @@ namespace LectureService.Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public Guid GetClass()
+        public async Task<Guid?> GetClass(Guid lectureId)
         {
-            return _context.Lectures.FirstOrDefault().ClassId;
+            var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
+            return lecture?.ClassId;
         }
     }
 }

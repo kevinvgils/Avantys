@@ -1,24 +1,36 @@
-﻿namespace LectureService.Domain
+﻿using EventLibrary;
+
+namespace LectureService.Domain
 {
     public class Lecture
     {
-        public Guid Id { get; set; }
+        public Guid LectureId { get; set; }
         public string Location { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public Guid StudyMaterialId { get; set; }
-        public Guid ClassId { get; set; }
-        public Guid TeacherId { get; set; }
+        public Guid? StudyMaterialId { get; set; }
+        public Guid? ClassId { get; set; }
+        public string Teacher { get; set; }
 
-        public Lecture(Guid id, string location, DateTime startTime, DateTime endTime, Guid studyMaterialId, Guid classId, Guid teacherId)
+        private void LectureEvent(LectureCreated @event)
         {
-            Id = id;
-            Location = location;
-            StartTime = startTime;
-            EndTime = endTime;
-            StudyMaterialId = studyMaterialId;
-            ClassId = classId;
-            TeacherId = teacherId;
+            LectureId = @event.LectureId;
+            Location = @event.Location;
+            StartTime = @event.StartTime;
+            EndTime = @event.EndTime;
+            StudyMaterialId = null;
+            ClassId = null;
+            Teacher = @event.Teacher;
+        }
+
+        public void LectureEvent(DomainEvent @event)
+        {
+            switch (@event)
+            {
+                case LectureCreated created:
+                    LectureEvent(created);
+                    break;
+            }
         }
     }
 }
