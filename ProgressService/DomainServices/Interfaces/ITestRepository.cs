@@ -10,5 +10,9 @@ namespace ProgressService.DomainServices.Interfaces
         IEnumerable<TestCreated> GetAllTests(IEnumerable<string> subjects);
 
         Task<TestCreated> CreateTest(TestCreated Test);
+
+        Task<TestUpdated> UpdateTest(TestUpdated Test);
+
+        Task<TestDeleted> DeleteTest(TestDeleted Test);
     }
 }

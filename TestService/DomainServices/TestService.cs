@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using TestService.Domain;
 using EventLibrary;
 using TestService.DomainServices.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ProgressService.DomainServices
 {
@@ -10,11 +11,13 @@ namespace ProgressService.DomainServices
     {
         public ITestRepository TestRepository { get; set; }
         public IBus _bus { get; set; }
+        public ILogger _logger { get; set; }
 
-        public TestService(ITestRepository repo, IBus serviceBus)
+        public TestService(ITestRepository repo, IBus serviceBus, ILogger logger)
         {
             TestRepository = repo;
             _bus = serviceBus;
+            _logger = logger;
         }
 
         public async Task<Test> CreateTestAsync(Test test)
@@ -35,14 +38,64 @@ namespace ProgressService.DomainServices
             return test;
         }
 
-        public Task<Test> UpdateTestAsync(Test test)
+        public async Task<Test> UpdateTestAsync(Test test)
         {
-            throw new NotImplementedException();
+            try
+            {
+                // Update the test in the repository
+                await TestRepository.UpdateTest(test);
+
+                // Log success message
+                _logger.LogInformation($"Test with Id '{test.Id}' updated successfully.");
+
+                // Publish TestCreated event
+                TestUpdated testUpdated = new TestUpdated
+                {
+                    Id = test.Id,
+                    Module = test.Module
+                };
+                await _bus.Publish(testUpdated);
+
+                return test;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                _logger.LogError(ex, $"Error updating test with Id '{test.Id}'.");
+
+                // Return null or throw the exception based on your error handling strategy
+                throw; // Re-throwing the exception to propagate it upwards for handling
+            }
         }
 
-        public Task<Test> DeleteTestAsync(Guid testId)
+        public async Task<Test> DeleteTestAsync(Guid testId)
         {
-            throw new NotImplementedException();
+            Test testToDelete = TestRepository.GetTest(testId);
+            try
+            {
+                // Update the test in the repository
+                await TestRepository.DeleteTest(testId);
+
+                // Log success message
+                _logger.LogInformation($"Test with Id '{testId}' deleted successfully.");
+
+                // Publish TestCreated event
+                TestDeleted testDeleted = new TestDeleted
+                {
+                    Id = testToDelete.Id,
+                };
+                await _bus.Publish(testDeleted);
+
+                return testToDelete;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                _logger.LogError(ex, $"Error updating test with Id '{testToDelete.Id}'.");
+
+                // Return null or throw the exception based on your error handling strategy
+                throw; // Re-throwing the exception to propagate it upwards for handling
+            }
         }
 
         public async Task<IEnumerable<Test>> GetAllTestsAsync() => await TestRepository.GetAllTests();

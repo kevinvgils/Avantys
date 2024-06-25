@@ -21,6 +21,12 @@ namespace Infrastructure
             return progress;
         }
 
+        public async Task deleteProgress(Progress progress)
+        {
+            _context.Progress.Remove(progress);
+            await _context.SaveChangesAsync();
+        }
+
         public IEnumerable<Progress> getAllProgress()
         {
             return _context.Progress.ToImmutableArray();

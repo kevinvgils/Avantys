@@ -1,10 +1,11 @@
-using EventLibrary;
 using Infrastructure;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using ProgressService.Consumer;
+using ProgressService.Consumer.Test;
 using ProgressService.DomainServices.Interfaces;
 using ProgressService.Infrastructure;
+using EventLibrary;
 using RabbitMQ.Client;
 
 
@@ -37,8 +38,12 @@ builder.Services.AddDbContext<ProgressDbContext>(options =>
 
 builder.Services.AddMassTransit(x =>
 {
-    x.AddConsumer<TestCreatedConsumer>();
+    
     x.AddConsumer<StudentCreatedConsumer>();
+
+    x.AddConsumer<TestCreatedConsumer>();
+    x.AddConsumer<TestUpdatedConsumer>();
+    x.AddConsumer<TestDeletedConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
@@ -51,7 +56,10 @@ builder.Services.AddMassTransit(x =>
         cfg.ReceiveEndpoint("Progressservice-queue", e =>
         {
             e.ConfigureConsumer<TestCreatedConsumer>(context);
+            e.ConfigureConsumer<TestUpdatedConsumer>(context);
+
             e.ConfigureConsumer<StudentCreatedConsumer>(context);
+
             e.Bind("default-exchange", x =>
             {
                 x.ExchangeType = "topic";

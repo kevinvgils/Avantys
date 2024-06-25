@@ -3,7 +3,7 @@ using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
 using EventLibrary;
 
-namespace ProgressService.Consumer
+namespace ProgressService.Consumer.Test
 {
     public class TestCreatedConsumer : IConsumer<TestCreated>
     {

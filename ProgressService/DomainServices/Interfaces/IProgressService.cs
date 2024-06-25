@@ -7,5 +7,7 @@ namespace ProgressService.DomainServices.Interfaces
     {
         Task<IEnumerable<Progress>> CreateProgressAsync(Student student);
         Task<IEnumerable<Progress>> CreateProgressAsync(TestCreated test);
+
+        Task<IEnumerable<Progress>> DeleteProgressAsync(TestCreated test);
     }
 }

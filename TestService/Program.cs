@@ -37,6 +37,10 @@ builder.Services.AddMassTransit(x =>
 
         cfg.Message<TestCreated>(e => { e.SetEntityName("default-exchange"); });
         cfg.Publish<TestCreated>(e => { e.ExchangeType = "topic"; });
+        cfg.Message<TestUpdated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<TestUpdated>(e => { e.ExchangeType = "topic"; });
+        cfg.Message<TestDeleted>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<TestDeleted>(e => { e.ExchangeType = "topic"; });
     });
 });
 

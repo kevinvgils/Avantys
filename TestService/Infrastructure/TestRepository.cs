@@ -19,9 +19,10 @@ namespace Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public Task DeleteTest(Guid testId)
+        public async Task DeleteTest(Guid testId)
         {
-            throw new NotImplementedException();
+            _context.Tests.Remove(GetTest(testId));
+            await _context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<Test>> GetAllTests()
@@ -34,9 +35,16 @@ namespace Infrastructure
             throw new NotImplementedException();
         }
 
-        public Task UpdateTest(Test test)
+        public async Task UpdateTest(Test test)
         {
-            throw new NotImplementedException();
+            var existingTest = await _context.Tests.FirstOrDefaultAsync(x => x.Id == test.Id);
+
+            if (existingTest != null)
+            {
+                existingTest = test;
+
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }

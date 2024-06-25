@@ -38,5 +38,28 @@ namespace ProgressService.DomainServices
 
             return createdProgress;
         }
+
+        public async Task<IEnumerable<Progress>> DeleteProgressAsync(TestCreated test)
+        {
+            IEnumerable<Progress> ProgressesToDelete = repo.getAllProgress().Where(x => x.TestId == test.Id);
+
+            foreach (Progress progress in ProgressesToDelete) { 
+                await repo.deleteProgress(progress);
+            }
+
+            return ProgressesToDelete;
+        }
+
+        public async Task<IEnumerable<Progress>> DeleteProgressAsync(Student student)
+        {
+            IEnumerable<Progress> ProgressesToDelete = repo.getAllProgress().Where(x => x.StudentId == student.Id);
+
+            foreach (Progress progress in ProgressesToDelete)
+            {
+                await repo.deleteProgress(progress);
+            }
+
+            return ProgressesToDelete;
+        }
     }
 }
