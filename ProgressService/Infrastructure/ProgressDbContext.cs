@@ -9,6 +9,7 @@ namespace Infrastructure
         public DbSet<Progress> Progress { get; set; } = null!;
         public DbSet<Student> Students { get; set; } = null!;
         public DbSet<Test> Tests { get; set; } = null!;
+        public DbSet<StudyProgram> StudyPrograms { get; set; } = null!;
 
         public ProgressDbContext(DbContextOptions<ProgressDbContext> options) : base(options) { }
 

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Eventlibrary
 {
+    [EntityName("StudentCreated")]
     public class Student
     {
         public Guid Id { get; set; }
@@ -25,5 +26,13 @@ namespace Eventlibrary
             Id = id;
             Module = module;
         }
+    }
+
+    [EntityName("StudyProgramCreated")]
+    public class StudyProgram
+    {
+        public Guid StudyProgramId { get; set; }
+        public string Name { get; set; }
+        public IEnumerable<string> Subjects { get; set; }
     }
 }
