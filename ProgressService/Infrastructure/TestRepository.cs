@@ -17,45 +17,46 @@ namespace Infrastructure
         }
 
 
-        public async Task<TestCreated> CreateTest(TestCreated Test)
+        public async Task<Test> CreateTest(TestCreated Test)
         {
-            await _context.Tests.AddAsync(Test);
+            Test test = new Test(Test.Id, Test.Module);
+            await _context.Tests.AddAsync(test);
             await _context.SaveChangesAsync();
-            return Test;
+            return test;
         }
 
-        public IEnumerable<TestCreated> GetAllTests()
+        public IEnumerable<Test> GetAllTests()
         {
             return _context.Tests.ToList();
         }
 
-        public IEnumerable<TestCreated> GetAllTests(IEnumerable<string> subjects)
+        public IEnumerable<Test> GetAllTests(IEnumerable<string> subjects)
         {
             return _context.Tests
                    .Where(test => subjects.Contains(test.Module))
                    .ToImmutableArray();
         }
 
-        public async Task<TestDeleted> DeleteTest(TestDeleted Test)
+        public async Task<Test> DeleteTest(TestDeleted Test)
         {
-            TestCreated testToDelete = new TestCreated(Test.Id, null);
+            Test testToDelete = new Test(Test.Id, null);
             _context.Tests.Remove(testToDelete);
             await _context.SaveChangesAsync();
-            return new TestDeleted(testToDelete.Id);
+            return new Test(testToDelete.Id, null);
         }
 
-        public async Task<TestUpdated> UpdateTest(TestUpdated Test)
+        public async Task<Test> UpdateTest(TestUpdated Test)
         {
-            TestCreated foundTest = await _context.Tests.FirstOrDefaultAsync(x => x.Id == Test.Id);
+            Test foundTest = await _context.Tests.FirstOrDefaultAsync(x => x.Id == Test.Id);
 
 
             if (foundTest != null)
             {
-                TestCreated newTest = new TestCreated(foundTest.Id, foundTest.Module);
+                Test newTest = new Test(foundTest.Id, foundTest.Module);
                 foundTest = newTest;
 
                 await _context.SaveChangesAsync();
-                return new TestUpdated(foundTest.Id, foundTest.Module);
+                return new Test(foundTest.Id, foundTest.Module);
             }
 
             return null;

@@ -9,6 +9,6 @@ namespace ProgressService.DomainServices.Interfaces
 
         IEnumerable<Student> GetAllStudents(string module);
 
-        Task<Student> CreateStudent(Student Student);
+        Task<Student> CreateStudent(StudentCreated Student);
     }
 }

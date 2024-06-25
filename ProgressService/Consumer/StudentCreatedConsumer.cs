@@ -4,7 +4,7 @@ using ProgressService.DomainServices.Interfaces;
 
 namespace ProgressService.Consumer
 {
-    public class StudentCreatedConsumer : IConsumer<Student>
+    public class StudentCreatedConsumer : IConsumer<StudentCreated>
     {
         private readonly IStudentRepository _StudentRepository;
         private readonly IProgressService _progressService;
@@ -15,11 +15,12 @@ namespace ProgressService.Consumer
             _StudentRepository = StudentRepository;
         }
 
-        public Task Consume(ConsumeContext<Student> context)
+        public Task Consume(ConsumeContext<StudentCreated> context)
         {
-            Student Student = new Student(context.Message.Id, context.Message.ProgramId);
+            StudentCreated Student = new StudentCreated();
+
             _StudentRepository.CreateStudent(Student);
-            _progressService.CreateProgressAsync(Student);
+            _progressService.CreateProgressAsync(new Domain.Student(Student.StudentId, Student.StudyProgramId));
 
             Console.WriteLine("CONSUME Student");
 

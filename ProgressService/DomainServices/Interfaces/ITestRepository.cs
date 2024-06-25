@@ -1,18 +1,18 @@
-﻿using ProgressService.Domain;
-using EventLibrary;
+﻿using EventLibrary;
+using ProgressService.Domain;
 
 namespace ProgressService.DomainServices.Interfaces
 {
     public interface ITestRepository
     {
-        IEnumerable<TestCreated> GetAllTests();
+        IEnumerable<Test> GetAllTests();
 
-        IEnumerable<TestCreated> GetAllTests(IEnumerable<string> subjects);
+        IEnumerable<Test> GetAllTests(IEnumerable<string> subjects);
 
-        Task<TestCreated> CreateTest(TestCreated Test);
+        Task<Test> CreateTest(TestCreated Test);
 
-        Task<TestUpdated> UpdateTest(TestUpdated Test);
+        Task<Test> UpdateTest(TestUpdated Test);
 
-        Task<TestDeleted> DeleteTest(TestDeleted Test);
+        Task<Test> DeleteTest(TestDeleted Test);
     }
 }
