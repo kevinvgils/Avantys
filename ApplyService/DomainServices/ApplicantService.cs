@@ -39,9 +39,12 @@ namespace ApplyService.DomainServices
             return applicant;
         }
 
-        public Task<Applicant> GetApplicantByIdAsync(Guid id)
+        public async Task<Applicant> GetApplicantByIdAsync(Guid applicantId)
         {
-            var applicant = _applyRepository.GetApplicantById(id);
+            var apId = applicantId.ToString();
+            var events = await _eventStore.GetEventsByAggregateIdAsync(apId);
+            var applicant = new Applicant();
+            applicant.ReplayEvents(events);
             return applicant;
         }
         public Task<List<Applicant>> GetAllApplicantsAsync()

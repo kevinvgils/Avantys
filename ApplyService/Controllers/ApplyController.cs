@@ -61,5 +61,16 @@ namespace ApplyService.Controllers
             });
             return Ok(result);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetApplicantById(Guid id)
+        {
+            var applicant = await _applyService.GetApplicantByIdAsync(id);
+            if (applicant == null)
+            {
+                return NotFound();
+            }
+            return Ok(applicant);
+        }
     }
 }

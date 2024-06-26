@@ -59,6 +59,14 @@ namespace ApplyService.Domain
             }
         }
 
+        public void ReplayEvents(IEnumerable<DomainEvent> events)
+        {
+            foreach (var @event in events)
+            {
+                ApplyEvent(@event);
+            }
+        }
+
 
     }
 }

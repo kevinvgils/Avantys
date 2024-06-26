@@ -8,6 +8,13 @@
     <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Publisher\**" />
+    <Content Remove="Publisher\**" />
+    <EmbeddedResource Remove="Publisher\**" />
+    <None Remove="Publisher\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="MassTransit" Version="8.2.2" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.2.2" />
@@ -28,10 +35,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\TestService.Domain\TestService.Domain.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Publisher\" />
 	</ItemGroup>
 
 </Project>
