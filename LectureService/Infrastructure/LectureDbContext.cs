@@ -8,6 +8,7 @@ namespace LectureService.Infrastructure
     {
         public DbSet<Lecture> Lectures { get; set; } = null!;
         public DbSet<StudyMaterial> StudyMaterials { get; set; } = null!;
+        public DbSet<Class> Classes { get; set; } = null!;
         public LectureDbContext(DbContextOptions<LectureDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

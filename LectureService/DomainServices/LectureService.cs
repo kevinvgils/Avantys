@@ -10,14 +10,12 @@ namespace LectureService.DomainServices
     {
         private readonly ILectureRepository _lectureRepository;
         private readonly IStudyMaterialRepository _studyMaterialRepository;
-        private readonly IEventStoreRepository _eventStore;
         private readonly IBusControl _serviceBus;
 
-        public LectureService(ILectureRepository lectureRepository, IStudyMaterialRepository studyMaterialRepository, IEventStoreRepository eventStore, IBusControl serviceBus)
+        public LectureService(ILectureRepository lectureRepository, IStudyMaterialRepository studyMaterialRepository, IBusControl serviceBus)
         {
             _lectureRepository = lectureRepository;
             _studyMaterialRepository = studyMaterialRepository;
-            _eventStore = eventStore;
             _serviceBus = serviceBus;
         }
 
@@ -31,7 +29,6 @@ namespace LectureService.DomainServices
                 EndTime = lecture.EndTime,
                 Teacher = lecture.Teacher
     };
-            await _eventStore.SaveEventAsync(@event);
             await _serviceBus.Publish(@event);
 
             lecture.LectureId = @event.LectureId;
@@ -50,9 +47,9 @@ namespace LectureService.DomainServices
             return lecture;
         }
 
-        public Task<Lecture> DeleteLectureAsync(Guid lectureId)
+        public Task<bool> DeleteLectureAsync(Guid lectureId)
         {
-            var lecture = _lectureRepository.DeleteLecture(lectureId);
+            var lecture = _lectureRepository.DeleteLectureAsync(lectureId);
             return lecture;
         }
 
@@ -63,18 +60,27 @@ namespace LectureService.DomainServices
                 StudyMaterialId = Guid.NewGuid(),
                 Content = studyMaterial.Content
             };
-            await _eventStore.SaveEventAsync(@event);
             await _serviceBus.Publish(@event);
 
             studyMaterial.StudyMaterialId = @event.StudyMaterialId;
-            _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
+            await _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
 
             return studyMaterial;
         }
 
-        public async Task AddClass(Guid classId, Guid lectureId)
+        public Task<List<StudyMaterial>> GetAllStudyMaterialsAsync()
         {
-            _lectureRepository.AddClass(classId, lectureId);
+            return _studyMaterialRepository.GetAllStudyMaterialsAsync();
+        }
+
+        public Task<List<Class>> GetAllClassesAsync()
+        {
+            return _lectureRepository.GetAllClassesAsync();
+        }
+
+        public async Task AssignClassAsync(Guid classId, Guid lectureId)
+        {
+            await _lectureRepository.AssignClassAsync(classId, lectureId);
         }
     }
 }

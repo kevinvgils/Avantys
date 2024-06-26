@@ -18,9 +18,9 @@ namespace LectureService.Consumers
             var @event = context.Message;
             var newClass = new Class();
 
-            newClass.ApplyEvent(@event);
+            newClass.ClassEvent(@event);
 
-            _classRepository.AddClass(newClass);
+            _lectureRepository.AddClass(newClass);
 
             return Task.CompletedTask;
         }

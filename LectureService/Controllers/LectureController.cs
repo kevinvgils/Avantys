@@ -4,6 +4,7 @@ using EventLibrary;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using LectureService.DomainServices.Interfaces;
+using static MassTransit.ValidationResultExtensions;
 
 namespace LectureService.Controllers
 {
@@ -60,6 +61,10 @@ namespace LectureService.Controllers
             try
             {
                 var deleted = await _lectureService.DeleteLectureAsync(lectureId);
+                if (!deleted)
+                {
+                    return NotFound();
+                }
                 return NotFound(); // Status 404 Not Found als lecture niet gevonden is
             }
             catch (Exception ex)
@@ -69,12 +74,12 @@ namespace LectureService.Controllers
         }
 
         [HttpPost("{lectureId}/create-studymaterial")]
-        public async Task<IActionResult> CreateStudyMaterial(StudyMaterialModel _studyMaterial, Guid lectureId)
+        public async Task<IActionResult> CreateStudyMaterial([FromBody] StudyMaterialModel _studyMaterial, Guid lectureId)
         {
             try
             {
                 var studyMaterial = new StudyMaterial();
-                studyMaterial.Content = studyMaterial.Content;
+                studyMaterial.Content = _studyMaterial.Content;
                 var createdStudyMaterial = await _lectureService.CreateStudyMaterialAsync(studyMaterial, lectureId);
 
                 return Ok(createdStudyMaterial);
@@ -85,12 +90,26 @@ namespace LectureService.Controllers
             }
         }
 
+        [HttpGet("get-studymaterials")]
+        public async Task<ActionResult<List<Class>>> GetAllStudyMaterials()
+        {
+            var studymaterials = await _lectureService.GetAllStudyMaterialsAsync();
+            return Ok(studymaterials);
+        }
+
+        [HttpGet("get-classes")]
+        public async Task<ActionResult<List<Class>>> GetAllClasses()
+        {
+            var classes = await _lectureService.GetAllClassesAsync();
+            return Ok(classes);
+        }
+
         [HttpPost("{lectureId}/assign-class")]
-        public async Task<IActionResult> AssignClass(Guid classId, Guid lectureId)
+        public async Task<IActionResult> AssignClass(Guid lectureId, [FromBody]AssignClassModel classId)
         {
             try
             {
-                await _lectureService.AddClass(classId, lectureId);
+                await _lectureService.AssignClassAsync(classId.Classid, lectureId);
 
                 return Ok();
             }

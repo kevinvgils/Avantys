@@ -13,9 +13,15 @@ namespace LectureService.Infrastructure
             _context = context;
         }
 
+        public async Task CreateStudyMaterial(StudyMaterial studyMaterial)
+        {
+            _context.StudyMaterials.Add(studyMaterial);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task AddStudyMaterial(StudyMaterial studyMaterial, Guid lectureId)
         {
-            var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.StudyMaterialId == lectureId);
+            var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
             if (lecture == null)
             {
                 throw new ArgumentException($"Lecture with ID {lectureId} not found.");
@@ -25,9 +31,9 @@ namespace LectureService.Infrastructure
             await _context.SaveChangesAsync();
         }
 
-        public async Task<StudyMaterial> GetStudyMaterialById(Guid studyMaterialId)
+        public async Task<List<StudyMaterial>> GetAllStudyMaterialsAsync()
         {
-            return await _context.StudyMaterials.FirstOrDefaultAsync(l => l.StudyMaterialId == studyMaterialId);
+            return await _context.StudyMaterials.ToListAsync();
         }
     }
 }

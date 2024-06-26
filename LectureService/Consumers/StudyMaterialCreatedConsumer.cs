@@ -2,6 +2,7 @@
 using LectureService.DomainServices.Interfaces;
 using EventLibrary;
 using MassTransit;
+using LectureService.Infrastructure;
 
 namespace LectureService.Consumers
 {
@@ -19,6 +20,7 @@ namespace LectureService.Consumers
             var @event = context.Message;
             var studyMaterial = new StudyMaterial();
             studyMaterial.StudyMaterialEvent(@event);
+            await _studyMaterialRepository.CreateStudyMaterial(studyMaterial);
         }
     }
 }

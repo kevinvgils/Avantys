@@ -25,7 +25,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LectureService", "LectureSe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LectureService.Domain", "LectureService.Domain\LectureService.Domain.csproj", "{F4B91756-E71F-45DE-9D31-7477C2457A5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterviewService.Domain", "InterviewService.Domain\InterviewService.Domain.csproj", "{4D27EF32-41C4-46D5-BCBE-2E19DD3A2F59}"
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterviewService.Domain", "InterviewService.Domain\InterviewService.Domain.csproj", "{4D27EF32-41C4-46D5-BCBE-2E19DD3A2F59}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassService", "ClassService\ClassService.csproj", "{770CD10B-3843-4572-803B-9B82AC02BAE9}"

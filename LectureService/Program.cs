@@ -19,7 +19,6 @@ builder.Services.AddScoped<ILectureService, LectureService.DomainServices.Lectur
 
 builder.Services.AddScoped<ILectureRepository, LectureRepository>();
 builder.Services.AddScoped<IStudyMaterialRepository, StudyMaterialRepository>();
-builder.Services.AddScoped<IEventStoreRepository, EventStoreRepository>();
 
 
 builder.Services.AddDbContext<LectureDbContext>(options =>
@@ -27,14 +26,11 @@ builder.Services.AddDbContext<LectureDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddDbContext<EventStoreDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("EventStoreConnection"));
-});
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<LectureCreatedConsumer>();
     x.AddConsumer<StudyMaterialCreatedConsumer>();
+    x.AddConsumer<ClassConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -47,6 +43,8 @@ builder.Services.AddMassTransit(x =>
         cfg.Publish<LectureCreated>(e => { e.ExchangeType = "topic"; });
         cfg.Message<StudyMaterialCreated>(e => { e.SetEntityName("default-exchange"); });
         cfg.Publish<StudyMaterialCreated>(e => { e.ExchangeType = "topic"; });
+        cfg.Message<ClassCreated>(e => { e.SetEntityName("default-exchange"); });
+        cfg.Publish<ClassCreated>(e => { e.ExchangeType = "topic"; });
 
         cfg.ReceiveEndpoint("lecture-created-queue", e =>
         {
@@ -84,8 +82,7 @@ using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<LectureDbContext>();
     dbContext.Database.Migrate();
-    var eventDbContext = scope.ServiceProvider.GetRequiredService<EventStoreDbContext>();
-    eventDbContext.Database.Migrate();
+
 }
 
 app.Run();

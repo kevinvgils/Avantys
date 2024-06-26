@@ -29,20 +29,41 @@ namespace LectureService.Infrastructure
             return await _context.Lectures.ToListAsync();
         }
 
-        public async Task<Lecture> DeleteLecture(Guid lectureId)
+        public async Task<bool> DeleteLectureAsync(Guid lectureId)
         {
-            return await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
+            var lecture = await _context.Lectures.FindAsync(lectureId);
+            if (lecture == null)
+            {
+                return false;
+            }
+
+            _context.Lectures.Remove(lecture);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task AddClass(Guid classId, Guid lectureId)
+        public async Task<List<Class>> GetAllClassesAsync()
+        {
+            return await _context.Classes.ToListAsync();
+        }
+
+
+        public async Task AddClass(Class @class)
+        {
+            _context.Classes.Add(@class);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AssignClassAsync(Guid classId, Guid lectureId)
         {
             var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
             if (lecture == null)
             {
-                throw new ArgumentException($"Lecture with ID {lectureId} not found.");
+                throw new ArgumentException("Lecture not found");
             }
 
             lecture.ClassId = classId;
+
             await _context.SaveChangesAsync();
         }
     }
