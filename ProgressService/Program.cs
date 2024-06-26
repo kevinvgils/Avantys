@@ -59,6 +59,7 @@ builder.Services.AddMassTransit(x =>
         {
             e.ConfigureConsumer<TestCreatedConsumer>(context);
             e.ConfigureConsumer<TestUpdatedConsumer>(context);
+            e.ConfigureConsumer<TestDeletedConsumer>(context);
 
             e.ConfigureConsumer<StudentCreatedConsumer>(context);
 

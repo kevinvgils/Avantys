@@ -11,9 +11,9 @@ namespace ProgressService.DomainServices
     {
         public ITestRepository TestRepository { get; set; }
         public IBus _bus { get; set; }
-        public ILogger _logger { get; set; }
+        private readonly ILogger<TestService> _logger;
 
-        public TestService(ITestRepository repo, IBus serviceBus, ILogger logger)
+        public TestService(ITestRepository repo, IBus serviceBus, ILogger<TestService> logger)
         {
             TestRepository = repo;
             _bus = serviceBus;
@@ -43,7 +43,7 @@ namespace ProgressService.DomainServices
             try
             {
                 // Update the test in the repository
-                await TestRepository.UpdateTest(test);
+                Test returnedTest = await TestRepository.UpdateTest(test);
 
                 // Log success message
                 _logger.LogInformation($"Test with Id '{test.Id}' updated successfully.");
@@ -56,8 +56,9 @@ namespace ProgressService.DomainServices
                 };
                 await _bus.Publish(testUpdated);
 
-                return test;
+                return returnedTest;
             }
+
             catch (Exception ex)
             {
                 // Log the exception
@@ -70,7 +71,7 @@ namespace ProgressService.DomainServices
 
         public async Task<Test> DeleteTestAsync(Guid testId)
         {
-            Test testToDelete = TestRepository.GetTest(testId);
+            Test testToDelete = await TestRepository.GetTest(testId);
             try
             {
                 // Update the test in the repository

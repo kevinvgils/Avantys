@@ -17,7 +17,14 @@ namespace ProgressService.Consumer
 
         public Task Consume(ConsumeContext<StudentCreated> context)
         {
-            StudentCreated Student = new StudentCreated();
+            StudentCreated Student = new StudentCreated()
+            {
+                StudentId = context.Message.StudentId,
+                ClassId = context.Message.ClassId,
+                StudyProgramId = context.Message.StudyProgramId,
+                Name = context.Message.Name,
+                Email = context.Message.Email
+            };
 
             _StudentRepository.CreateStudent(Student);
             _progressService.CreateProgressAsync(new Domain.Student(Student.StudentId, Student.StudyProgramId));

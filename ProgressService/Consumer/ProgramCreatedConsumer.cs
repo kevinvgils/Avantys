@@ -17,7 +17,13 @@ namespace ProgressService.Consumer
 
             public Task Consume(ConsumeContext<StudyProgramCreated> context)
             {
-                StudyProgramCreated StudyProgramCreated = new StudyProgramCreated();
+                StudyProgramCreated StudyProgramCreated = new StudyProgramCreated() 
+                {
+                    StudyProgramId = context.Message.StudyProgramId,
+                    Name = context.Message.Name,
+                    Subjects = context.Message.Subjects
+                };
+
                 _StudyProgramCreatedRepository.CreateProgram(StudyProgramCreated);
 
                 Console.WriteLine("CONSUME StudyProgramCreated");

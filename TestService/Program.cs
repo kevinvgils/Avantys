@@ -44,6 +44,11 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+// Add logging
+builder.Logging.ClearProviders(); // Optional: Clears default logging providers
+builder.Logging.AddConsole(); // Adds console logging
+builder.Logging.AddDebug(); // Adds debug logging
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

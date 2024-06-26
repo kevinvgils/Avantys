@@ -14,9 +14,9 @@ namespace TestService.Controllers
     {
         // GET: TestController
         private readonly ITestService _testService;
-        private readonly ILogger _logger;
+        private readonly ILogger<TestController> _logger;
 
-        public TestController(ITestService testService, ILogger logger)
+        public TestController(ITestService testService, ILogger<TestController> logger)
         {
             _testService = testService;
             _logger = logger;
@@ -73,7 +73,7 @@ namespace TestService.Controllers
             }
         }
 
-        [HttpDelete()]
+        [HttpDelete("{testId}")]
         public async Task<IActionResult> DeleteTest(Guid testId)
         {
             return Ok(await _testService.DeleteTestAsync(testId));

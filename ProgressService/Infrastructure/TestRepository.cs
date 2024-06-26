@@ -47,18 +47,16 @@ namespace Infrastructure
 
         public async Task<Test> UpdateTest(TestUpdated Test)
         {
-            Test foundTest = await _context.Tests.FirstOrDefaultAsync(x => x.Id == Test.Id);
+            var existingTest = await _context.Tests.FirstOrDefaultAsync(x => x.Id == Test.Id);
 
-
-            if (foundTest != null)
+            if (existingTest != null)
             {
-                Test newTest = new Test(foundTest.Id, foundTest.Module);
-                foundTest = newTest;
+                // Update properties
+                existingTest.Module = Test.Module;
 
                 await _context.SaveChangesAsync();
-                return new Test(foundTest.Id, foundTest.Module);
+                return existingTest;
             }
-
             return null;
         }
     }
