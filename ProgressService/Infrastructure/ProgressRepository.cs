@@ -1,4 +1,5 @@
-﻿using ProgressService.Domain;
+﻿using Microsoft.EntityFrameworkCore;
+using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
 using System.Collections.Immutable;
 
@@ -26,6 +27,11 @@ namespace Infrastructure
         {
             _context.Progress.Remove(progress);
             await _context.SaveChangesAsync();
+        }
+
+        public IEnumerable<Progress> findAllProgressFromStudent(Guid studentId)
+        {
+            return _context.Progress.Where(x => x.StudentId == studentId).ToList();
         }
 
         public IEnumerable<Progress> getAllProgress()

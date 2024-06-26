@@ -34,16 +34,13 @@ namespace ProgressService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Progress> GetProgress()
-        {
-            return _ProgressRepository.getAllProgress();
-        }
+        public IEnumerable<Progress> GetProgress() => _ProgressRepository.getAllProgress();
 
         [HttpGet("{ProgressId}")]
-        public Progress GetProgress(string ProgressId)
-        {
-            return _ProgressRepository.getProgress(new Guid(ProgressId));
-        }
+        public Progress GetProgress(string ProgressId) => _ProgressRepository.getProgress(new Guid(ProgressId));
+
+        [HttpGet("student/{StudentId}")]
+        public IEnumerable<Progress> GetProgressByStudentId(string StudentId) =>  _ProgressRepository.findAllProgressFromStudent(new Guid(StudentId));
 
         [HttpPut("{ProgressId}/Grade")]
         public void GradeProgress(string ProgressId, Progress progress)

@@ -8,6 +8,7 @@ namespace ProgressService.DomainServices.Interfaces
         IEnumerable<Progress> getAllProgress();
 
         Progress getProgress(Guid id);
+        IEnumerable<Progress> findAllProgressFromStudent(Guid studentId);
 
         Task<Progress> createProgress(Progress progress);
 
