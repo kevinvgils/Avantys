@@ -56,6 +56,17 @@ builder.Services.AddMassTransit(x =>
             e.Bind("default-exchange", x =>
             {
                 x.ExchangeType = "topic";
+                x.RoutingKey = "applicant.created";
+            });
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "applicant.updated";
+            });
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "interview.created";
             });
         });
         cfg.ConfigureEndpoints(context);

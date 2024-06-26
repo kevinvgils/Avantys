@@ -35,7 +35,10 @@ namespace CustomerDataService.DomainServices
                         Email = email,
                         StudyProgram = ""
                     };
-                    await _publishEndpoint.Publish(customerFetched);
+                    await _publishEndpoint.Publish(customerFetched, context =>
+                    {
+                        context.SetRoutingKey("applicant.created");
+                    });
                 }
                 
               

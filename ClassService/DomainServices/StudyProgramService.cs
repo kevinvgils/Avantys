@@ -26,7 +26,10 @@ namespace DomainServices
                 Name = studyProgram.Name,
             };
 
-            await _serviceBus.Publish(studyProgramCreated);
+            await _serviceBus.Publish(studyProgramCreated, context =>
+            {
+                context.SetRoutingKey("studyprogram.created");
+            });
 
             studyProgram.StudyProgramId = studyProgramCreated.StudyProgramId;
 

@@ -46,7 +46,10 @@ namespace DomainServices
                 Email = student.Email,
                 StudyProgramId = (Guid)student.StudyProgramId
             };
-            await _serviceBus.Publish(studentCreated);
+            await _serviceBus.Publish(studentCreated, context =>
+            {
+                context.SetRoutingKey("student.created");
+            });
             return student;
         }
 

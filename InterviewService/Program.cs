@@ -45,7 +45,7 @@ builder.Services.AddMassTransit(x =>
             e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
             e.Bind("default-exchange", x =>
             {
-                x.RoutingKey = "#"; // wildcard to receive all messages
+                x.RoutingKey = "applicant.created";
                 x.ExchangeType = "topic";
             });
         });

@@ -54,7 +54,10 @@ namespace InterviewService.DomainServices
             interviewUpdated.InterviewId = interview.InterviewId;
             interviewUpdated.IsAccepted = updatedInterview.Status == "Accepted";
 
-            await serviceBus.Publish(interviewUpdated);
+            await serviceBus.Publish(interviewUpdated, context =>
+            {
+                context.SetRoutingKey("interview.updated");
+            });
 
             return interview;
         }

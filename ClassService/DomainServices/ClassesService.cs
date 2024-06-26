@@ -26,7 +26,10 @@ namespace DomainServices
                 ClassCode = @class.ClassCode,
             };
 
-            await _serviceBus.Publish(classCreated);
+            await _serviceBus.Publish(classCreated, context =>
+            {
+                context.SetRoutingKey("class.created");
+            });
 
             @class.ClassId = classCreated.ClassId;
 
