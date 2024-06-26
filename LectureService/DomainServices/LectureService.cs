@@ -39,6 +39,23 @@ namespace LectureService.DomainServices
             return lecture;
         }
 
+        public Task<List<Lecture>> GetAllLecturesAsync()
+        {
+            return _lectureRepository.GetAllLecturesAsync();
+        }
+
+        public Task<Lecture> GetLectureByIdAsync(Guid lectureId)
+        {
+            var lecture = _lectureRepository.GetLectureById(lectureId);
+            return lecture;
+        }
+
+        public Task<Lecture> DeleteLectureAsync(Guid lectureId)
+        {
+            var lecture = _lectureRepository.DeleteLecture(lectureId);
+            return lecture;
+        }
+
         public async Task<StudyMaterial> CreateStudyMaterialAsync(StudyMaterial studyMaterial, Guid lectureId)
         {
             var @event = new StudyMaterialCreated()
@@ -53,16 +70,6 @@ namespace LectureService.DomainServices
             _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
 
             return studyMaterial;
-        }
-
-        public Task<Lecture> GetLectureByIdAsync(Guid id)
-        {
-            var lecture = _lectureRepository.GetLectureById(id);
-            return lecture;
-        }
-        public Task<List<Lecture>> GetAllLecturesAsync()
-        {
-            return _lectureRepository.GetAllLecturesAsync();
         }
 
         public async Task AddClass(Guid classId, Guid lectureId)

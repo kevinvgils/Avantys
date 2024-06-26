@@ -29,6 +29,11 @@ namespace LectureService.Infrastructure
             return await _context.Lectures.ToListAsync();
         }
 
+        public async Task<Lecture> DeleteLecture(Guid lectureId)
+        {
+            return await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
+        }
+
         public async Task AddClass(Guid classId, Guid lectureId)
         {
             var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
@@ -38,14 +43,7 @@ namespace LectureService.Infrastructure
             }
 
             lecture.ClassId = classId;
-            _context.Lectures.Update(lecture);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<Guid?> GetClass(Guid lectureId)
-        {
-            var lecture = await _context.Lectures.FirstOrDefaultAsync(l => l.LectureId == lectureId);
-            return lecture?.ClassId;
         }
     }
 }

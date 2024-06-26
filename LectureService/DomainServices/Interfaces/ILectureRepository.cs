@@ -11,8 +11,8 @@ namespace LectureService.DomainServices.Interfaces
 
         Task<List<Lecture>> GetAllLecturesAsync();
 
-        Task AddClass(Guid classId, Guid lectureId);
+        Task<Lecture> DeleteLecture(Guid lectureId);
 
-        Task<Guid?> GetClass(Guid lectureId);
+        Task AddClass(Guid classId, Guid lectureId);
     }
 }
