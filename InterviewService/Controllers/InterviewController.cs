@@ -35,8 +35,77 @@ namespace InterviewService.Controllers
                 return NotFound("Interview not found");
             }
 
-            return Ok(updatedInterview);
+            var result = new
+            {
+                InterviewId = updatedInterview.InterviewId.ToString().ToUpper(),
+                ApplicantId = updatedInterview.ApplicantId.ToString().ToUpper(),
+                updatedInterview.Comments,
+                updatedInterview.ScheduledDate, 
+                updatedInterview.Status
+            };
 
+            return Ok(result);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllInterviews()
+        {
+            var interviews = await _interviewService.GetAllInterviewsAsync();
+
+            var result = interviews.Select(interview => new
+            {
+                InterviewId = interview.InterviewId.ToString().ToUpper(),
+                ApplicantId = interview.ApplicantId.ToString().ToUpper(),
+                interview.Comments,
+                interview.ScheduledDate,
+                interview.Status
+            });
+
+            return Ok(result);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetInterviewById(Guid id)
+        {
+            var interview = await _interviewService.GetInterviewByIdAsync(id);
+
+            if (interview == null)
+            {
+                return NotFound("Interview not found");
+            }
+
+            var result = new
+            {
+                InterviewId = interview.InterviewId.ToString().ToUpper(),
+                ApplicantId = interview.ApplicantId.ToString().ToUpper(),
+                interview.Comments,
+                interview.ScheduledDate,
+                interview.Status
+            };
+
+            return Ok(result);
+        }
+        [HttpGet("applicantId")]
+        public async Task<IActionResult> GetInterviewByApplicantId([FromBody] GetByApplicantIdModel model)
+        {
+            var interview = await _interviewService.GetInterviewByApplicantIdAsync(model.ApplicantId);
+
+            if (interview == null)
+            {
+                return NotFound("Interview not found");
+            }
+
+            var result = new
+            {
+                InterviewId = interview.InterviewId.ToString().ToUpper(),
+                ApplicantId = interview.ApplicantId.ToString().ToUpper(),
+                interview.Comments,
+                interview.ScheduledDate,
+                interview.Status
+            };
+
+            return Ok(result);
         }
 
     }

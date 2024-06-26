@@ -25,7 +25,13 @@ namespace ClassService.Controllers
             studyProgram.Subjects = newStudyProgram.Subjects;
             var createdStudyProgram = await _studyProgramService.CreateStudyProgramAsync(studyProgram);
 
-            return Ok(createdStudyProgram);
+            var result = new
+            {
+                StudyProgramId = createdStudyProgram.StudyProgramId.ToString().ToUpper(),
+                createdStudyProgram.Name,
+                createdStudyProgram.Subjects,
+            };
+            return Ok(result);
         }
 
     }

@@ -32,14 +32,34 @@ namespace ApplyService.Controllers
             applicant.StudyProgram = application.StudyProgram;
             var createdApplicant = await _applyService.CreateApplicantAsync(applicant);
 
-            return Ok(createdApplicant);
+            var result = new
+            {
+                ApplicantId = createdApplicant.ApplicantId.ToString().ToUpper(),
+                createdApplicant.Name,
+                createdApplicant.Email,
+                createdApplicant.IsAccepted,
+                createdApplicant.ApplyDate,
+                createdApplicant.StudyProgram
+            };
+
+            return Ok(result);
         }
 
         [HttpGet]
         public async Task<ActionResult<List<Applicant>>> GetAllApplicants()
         {
             var applicants = await _applyService.GetAllApplicantsAsync();
-            return Ok(applicants);
+
+            var result = applicants.Select(applicant => new
+            {
+                ApplicantId = applicant.ApplicantId.ToString().ToUpper(),
+                applicant.Name,
+                applicant.ApplyDate,
+                applicant.IsAccepted,
+                applicant.StudyProgram,
+                applicant.Email
+            });
+            return Ok(result);
         }
     }
 }
