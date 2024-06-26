@@ -50,9 +50,21 @@ builder.Services.AddMassTransit(x =>
         {
             e.ConfigureConsumer<LectureCreatedConsumer>(context);
             e.ConfigureConsumer<StudyMaterialCreatedConsumer>(context);
+            e.ConfigureConsumer<ClassConsumer>(context);
             e.Bind("default-exchange", x =>
             {
                 x.ExchangeType = "topic";
+                x.RoutingKey = "class.created";
+            });
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "studymaterial.created";
+            });
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "lecture.created";
             });
         });
         cfg.ConfigureEndpoints(context);

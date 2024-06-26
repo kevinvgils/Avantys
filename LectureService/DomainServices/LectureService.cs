@@ -29,7 +29,10 @@ namespace LectureService.DomainServices
                 EndTime = lecture.EndTime,
                 Teacher = lecture.Teacher
     };
-            await _serviceBus.Publish(@event);
+            await _serviceBus.Publish(@event, context =>
+            {
+                context.SetRoutingKey("lecture.created");
+            });
 
             lecture.LectureId = @event.LectureId;
 
@@ -60,7 +63,10 @@ namespace LectureService.DomainServices
                 StudyMaterialId = Guid.NewGuid(),
                 Content = studyMaterial.Content
             };
-            await _serviceBus.Publish(@event);
+            await _serviceBus.Publish(@event, context =>
+            {
+                context.SetRoutingKey("studymaterial.created");
+            });
 
             studyMaterial.StudyMaterialId = @event.StudyMaterialId;
             await _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
