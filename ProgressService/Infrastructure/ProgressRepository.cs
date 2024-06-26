@@ -18,6 +18,7 @@ namespace Infrastructure
         public async Task<Progress> createProgress(Progress progress)
         {
             await _context.Progress.AddAsync(progress);
+            await _context.SaveChangesAsync();
             return progress;
         }
 

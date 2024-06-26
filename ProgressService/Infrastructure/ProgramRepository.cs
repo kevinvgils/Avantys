@@ -1,5 +1,6 @@
 ﻿using EventLibrary;
 using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using ProgressService.Domain;
 using ProgressService.DomainServices.Interfaces;
 using System.Collections.Immutable;
@@ -19,12 +20,26 @@ namespace ProgressService.Infrastructure
         {
             StudyProgram programToAdd = new StudyProgram(Program.StudyProgramId, Program.Name, Program.Subjects);
             await _context.StudyPrograms.AddAsync(programToAdd);
+            await _context.SaveChangesAsync();
+
             return programToAdd;
         }
 
         public IEnumerable<StudyProgram> GetAllPrograms()
         {
-            return _context.StudyPrograms.ToImmutableArray();
+            try
+            {
+                // Ensure that the query correctly handles the Subjects property
+                IEnumerable<StudyProgram> studyPrograms = _context.StudyPrograms.ToList();
+
+                return studyPrograms;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception with more details
+                Console.WriteLine($"Error fetching programs in repo: {ex.Message}");
+                throw;
+            }
         }
 
         public StudyProgram GetPrograms(Guid programId)

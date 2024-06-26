@@ -23,6 +23,7 @@ namespace Infrastructure
         {
             Student studentToAdd = new Student(Student.StudentId, Student.StudyProgramId);
             await _context.Students.AddAsync(studentToAdd);
+            await _context.SaveChangesAsync();
             return studentToAdd;
         }
 
@@ -36,11 +37,19 @@ namespace Infrastructure
             IEnumerable<Student> students = GetAllStudents(); // Assuming GetAllStudents() retrieves all students
 
             // Filter students based on the module condition
-            return students.Where(student =>
+
+            Console.WriteLine("Program found with student");
+            students = students.Where(student =>
             {
                 StudyProgram program = _programRepository.GetPrograms(student.ProgramId);
+                Console.WriteLine($"{program.Id}");
+
                 return program != null && program.Subjects.Contains(module);
             }).ToList();
+
+            
+
+            return students;
         }
     }
 }

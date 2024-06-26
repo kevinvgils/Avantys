@@ -12,8 +12,9 @@ namespace ProgressService.DomainServices
         public async Task<IEnumerable<Progress>> CreateProgressAsync(Student student)
         {
             StudyProgram studentProgram = studyRepo.GetPrograms(student.ProgramId);
-
             IEnumerable<Test> tests = testRepo.GetAllTests(studentProgram.Subjects);
+            Console.WriteLine($"Recieved {tests.Count()} students for ProgressCreation");
+
             List<Progress> createdProgress = new List<Progress>();
 
             foreach (Test test in tests)
@@ -28,10 +29,15 @@ namespace ProgressService.DomainServices
         public async Task<IEnumerable<Progress>> CreateProgressAsync(Test test)
         {
             IEnumerable<Student> students = studentRepo.GetAllStudents(test.Module);
+
+            Console.WriteLine($"Recieved {students.Count()} students for ProgressCreation");
+
             List<Progress> createdProgress = new List<Progress>();
 
             foreach (Student student in students)
             {
+
+                Console.WriteLine($"Progress: student {student.Id}, test {test.Id}");
                 Progress progress = new Progress(test.Id, student.Id, test.Module, null, null);
                 createdProgress.Add(await repo.createProgress(progress));
             }

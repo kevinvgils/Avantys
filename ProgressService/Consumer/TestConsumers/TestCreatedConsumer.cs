@@ -28,6 +28,7 @@ namespace ProgressService.Consumer.TestConsumers
                 // Save the test using the repository
                 Test returnedTest = await _TestRepository.CreateTest(test);
 
+
                 // Create progress for the test
                 await _progressService.CreateProgressAsync(returnedTest);
 

@@ -80,7 +80,7 @@ namespace ProgressService.Controllers
             {
                 _logger.LogInformation("Fetching all studies...");
 
-                var programs = _ProgramRepository.GetAllPrograms();
+                IEnumerable<StudyProgram> programs = _ProgramRepository.GetAllPrograms();
 
                 _logger.LogInformation($"Retrieved {programs.Count()} studies successfully.");
 
