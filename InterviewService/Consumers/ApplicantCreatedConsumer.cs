@@ -7,17 +7,16 @@ namespace InterviewService.Consumers
 {
     public class ApplicantCreatedConsumer(IInterviewService interviewService) : IConsumer<ApplicantCreated>
     {
-        public Task Consume(ConsumeContext<ApplicantCreated> context)
+        public async Task Consume(ConsumeContext<ApplicantCreated> context)
         {
             Console.WriteLine(context.Message.Name);
             var message = context.Message;
             var interview = new Interview();
             interview.ApplyEvent(message);
 
-            interviewService.CreateInterviewAsync(interview);
+            await interviewService.CreateInterviewAsync(interview);
 
 
-            return Task.CompletedTask;
         }
     }
 }

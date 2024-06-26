@@ -13,7 +13,6 @@ WORKDIR /App
 # Copy everything
 COPY ["ApplyService/ApplyService.csproj", "ApplyService/"]
 COPY ["ApplyService.Domain/*.csproj", "ApplyService.Domain/"]
-COPY ["EventLibrary/*.csproj", "EventLibrary/"]
 
 
 

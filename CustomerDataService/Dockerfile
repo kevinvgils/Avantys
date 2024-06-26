@@ -11,22 +11,23 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /App
 
 # Copy everything
-COPY ["ClassService/ClassService.csproj", "ClassService/"]
-COPY ["ClassService.Domain/*.csproj", "ClassService.Domain/"]
+COPY ["CustomerDataService/CustomerDataService.csproj", "CustomerDataService/"]
+COPY ["CustomerDataService.Domain/*.csproj", "CustomerDataService.Domain/"]
+
 
 # Restore as distinct layers
-RUN dotnet restore "ClassService/ClassService.csproj"
+RUN dotnet restore "CustomerDataService/CustomerDataService.csproj"
 
 COPY . .
 
-WORKDIR "/App/ClassService"
-RUN dotnet build "ClassService.csproj" -c Release -o /App/build
+WORKDIR "/App/CustomerDataService"
+RUN dotnet build "CustomerDataService.csproj" -c Release -o /App/build
 
 FROM build-env AS publish
-RUN dotnet publish "ClassService.csproj" -c Release -o /App/publish
+RUN dotnet publish "CustomerDataService.csproj" -c Release -o /App/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
 COPY --from=publish /App/publish .
-ENTRYPOINT ["dotnet", "ClassService.dll"]  
+ENTRYPOINT ["dotnet", "CustomerDataService.dll"]  
 

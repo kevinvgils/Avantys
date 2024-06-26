@@ -29,7 +29,10 @@ namespace ApplyService.DomainServices
                 StudyProgram = applicant.StudyProgram,
             };
             await _eventStore.SaveEventAsync(@event);
-            await _serviceBus.Publish(@event);
+            await _serviceBus.Publish(@event, context =>
+            {
+                context.SetRoutingKey("applicant.created");
+            });
 
             applicant.ApplicantId = @event.ApplicantId;
 
@@ -59,7 +62,10 @@ namespace ApplyService.DomainServices
             };
 
             await _eventStore.SaveEventAsync(@event);
-            await _serviceBus.Publish(@event);
+            await _serviceBus.Publish(@event, context =>
+            {
+                context.SetRoutingKey("applicant.updated");
+            });
 
             return applicant;
         }

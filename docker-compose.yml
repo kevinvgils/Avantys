@@ -105,6 +105,26 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5005/health"]
 
+  customerdataservice:
+    build:
+      context: .
+      dockerfile: ./CustomerDataService/Dockerfile
+    ports:
+      - "5009:8080"
+    restart: on-failure
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      sqlserver:
+        condition: service_healthy
+    links:
+      - rabbitmq
+      - sqlserver 
+    networks:
+      - mynetwork
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5009/health"]
+
 networks:
   mynetwork:
     driver: bridge
