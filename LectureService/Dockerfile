@@ -13,7 +13,6 @@ WORKDIR /App
 # Copy everything
 COPY ["LectureService/LectureService.csproj", "LectureService/"]
 COPY ["LectureService.Domain/*.csproj", "LectureService.Domain/"]
-COPY ["EventLibrary/*.csproj", "EventLibrary/"]
 
 
 # Restore as distinct layers
