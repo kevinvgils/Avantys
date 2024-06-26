@@ -13,16 +13,14 @@ namespace ClassService.Consumers
         {
             _classRepository = classRepository;
         }
-        public Task Consume(ConsumeContext<ClassCreated> context)
+        public async Task Consume(ConsumeContext<ClassCreated> context)
         {
             var @event = context.Message;
             var newClass = new Class();
-
             newClass.ApplyEvent(@event);
 
-            _classRepository.AddClass(newClass);
+            await _classRepository.AddClass(newClass);
 
-            return Task.CompletedTask;
         }
     }
 }
