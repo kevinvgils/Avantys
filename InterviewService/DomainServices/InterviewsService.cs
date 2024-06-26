@@ -15,6 +15,20 @@ namespace InterviewService.DomainServices
             return interview;
         }
 
+        public async Task<List<Interview>> GetAllInterviewsAsync()
+        {
+            var interviews = await repo.GetAllInterviews();
+
+            return interviews;
+        }
+
+        public async Task<Interview> GetInterviewByApplicantIdAsync(Guid id)
+        {
+            var interview = await repo.GetInterviewByApplicantId(id);
+
+            return interview;
+        }
+
         public async Task<Interview> GetInterviewByIdAsync(Guid id)
         {
             var interview = await repo.GetInterviewById(id);
