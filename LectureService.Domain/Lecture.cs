@@ -9,7 +9,9 @@ namespace LectureService.Domain
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public Guid? StudyMaterialId { get; set; }
+        public StudyMaterial? StudyMaterial { get; set; }
         public Guid? ClassId { get; set; }
+        public Class? @class { get; set; }
         public string Teacher { get; set; }
 
         private void LectureEvent(LectureCreated @event)
