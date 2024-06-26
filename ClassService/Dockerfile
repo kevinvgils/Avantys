@@ -13,8 +13,6 @@ WORKDIR /App
 # Copy everything
 COPY ["ClassService/ClassService.csproj", "ClassService/"]
 COPY ["ClassService.Domain/*.csproj", "ClassService.Domain/"]
-COPY ["EventLibrary/*.csproj", "EventLibrary/"]
-
 
 # Restore as distinct layers
 RUN dotnet restore "ClassService/ClassService.csproj"

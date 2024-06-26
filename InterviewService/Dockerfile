@@ -12,9 +12,7 @@ WORKDIR /App
 
 # Copy everything
 COPY ["InterviewService/InterviewService.csproj", "InterviewService/"]
-COPY ["Domain/*.csproj", "Domain/"]
-COPY ["EventLibrary/*.csproj", "EventLibrary/"]
-
+COPY ["InterviewService.Domain/*.csproj", "InterviewService.Domain/"]
 
 # Restore as distinct layers
 RUN dotnet restore "InterviewService/InterviewService.csproj"
