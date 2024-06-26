@@ -2,6 +2,7 @@
 using ApplyService.DomainServices;
 using ApplyService.DomainServices.Interfaces;
 using EventLibrary;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -28,6 +29,34 @@ namespace ApplyService.Infrastructure
                 JsonConvert.DeserializeObject<DomainEvent>(e.Data)).ToList();
 
             return domainEvents;
+        }
+
+        public async Task<List<DomainEvent>> GetEventsByAggregateIdAsync(string aggregateId)
+        {
+            var eventStores = await _context.EventStores
+                                .Where(e => e.AggregateId == aggregateId)
+                                .OrderBy(e => e.OccurredOn)
+                                .ToListAsync();
+
+            var domainEvents = eventStores.Select(e => ConvertToDomainEvent(e)).ToList();
+
+            return domainEvents;
+        }
+        private DomainEvent ConvertToDomainEvent(EventStore eventStore)
+        {
+            // Use a switch or some type of mapping to convert from EventStore to DomainEvent
+            switch (eventStore.EventType)
+            {
+                case nameof(ApplicantCreated):
+                    return JsonConvert.DeserializeObject<ApplicantCreated>(eventStore.Data);
+                case nameof(ApplicantUpdated):
+                    return JsonConvert.DeserializeObject<ApplicantUpdated>(eventStore.Data);
+                case nameof(InterviewUpdated):
+                    return JsonConvert.DeserializeObject<InterviewUpdated>(eventStore.Data);
+                // Add other cases for different event types as needed
+                default:
+                    throw new InvalidOperationException($"Event type {eventStore.EventType} not recognized.");
+            }
         }
 
         public async Task SaveEventAsync(DomainEvent @event)

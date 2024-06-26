@@ -7,5 +7,6 @@ namespace ApplyService.DomainServices.Interfaces
         Task SaveEventAsync(DomainEvent @event);
 
         Task<List<DomainEvent>> GetAllEventsAsync();
+        Task<List<DomainEvent>> GetEventsByAggregateIdAsync(string aggregateId);
     }
 }
