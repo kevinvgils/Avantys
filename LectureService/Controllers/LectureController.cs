@@ -20,8 +20,8 @@ namespace LectureService.Controllers
             _lectureService = lectureService;
         }
 
-        [HttpPost("create-lecture")]
-        public async Task<IActionResult> CreateLecture(ILecture _lecture)
+        [HttpPost]
+        public async Task<IActionResult> CreateLecture(LectureModel _lecture)
         {
             try
             {
@@ -40,14 +40,14 @@ namespace LectureService.Controllers
             }
         }
 
-        [HttpPost("create-studymaterial")]
-        public async Task<IActionResult> CreateStudyMaterial(IStudyMaterial _studyMaterial)
+        [HttpPost("{lectureId}/create-studymaterial")]
+        public async Task<IActionResult> CreateStudyMaterial(StudyMaterialModel _studyMaterial, Guid lectureId)
         {
             try
             {
                 var studyMaterial = new StudyMaterial();
                 studyMaterial.Content = studyMaterial.Content;
-                var createdStudyMaterial = await _lectureService.CreateStudyMaterialAsync(studyMaterial);
+                var createdStudyMaterial = await _lectureService.CreateStudyMaterialAsync(studyMaterial, lectureId);
 
                 return Ok(createdStudyMaterial);
             }
@@ -72,21 +72,6 @@ namespace LectureService.Controllers
                 await _lectureService.AddClass(classId, lectureId);
 
                 return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        [HttpPost("add-study-material")]
-        public async Task<IActionResult> AddStudyMaterial(Guid lectureId, StudyMaterial studyMaterial)
-        {
-            try
-            {
-               await _lectureService.AddStudyMaterial(studyMaterial, lectureId);
-               
-               return Ok();
             }
             catch (ArgumentException ex)
             {

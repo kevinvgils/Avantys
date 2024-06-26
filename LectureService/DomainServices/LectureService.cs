@@ -39,7 +39,7 @@ namespace LectureService.DomainServices
             return lecture;
         }
 
-        public async Task<StudyMaterial> CreateStudyMaterialAsync(StudyMaterial studyMaterial)
+        public async Task<StudyMaterial> CreateStudyMaterialAsync(StudyMaterial studyMaterial, Guid lectureId)
         {
             var @event = new StudyMaterialCreated()
             {
@@ -50,6 +50,7 @@ namespace LectureService.DomainServices
             await _serviceBus.Publish(@event);
 
             studyMaterial.StudyMaterialId = @event.StudyMaterialId;
+            _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
 
             return studyMaterial;
         }
@@ -67,11 +68,6 @@ namespace LectureService.DomainServices
         public async Task AddClass(Guid classId, Guid lectureId)
         {
             _lectureRepository.AddClass(classId, lectureId);
-        }
-
-        public async Task AddStudyMaterial(StudyMaterial studyMaterial, Guid lectureId)
-        {
-            _studyMaterialRepository.AddStudyMaterial(studyMaterial, lectureId);
         }
     }
 }

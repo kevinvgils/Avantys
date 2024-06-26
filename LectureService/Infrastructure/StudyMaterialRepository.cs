@@ -22,7 +22,6 @@ namespace LectureService.Infrastructure
             }
 
             lecture.StudyMaterialId = studyMaterial.StudyMaterialId;
-            _context.Lectures.Update(lecture);
             await _context.SaveChangesAsync();
         }
 
