@@ -4,6 +4,7 @@ using TestService.Domain;
 using EventLibrary;
 using TestService.DomainServices.Interfaces;
 using static System.Net.Mime.MediaTypeNames;
+using MassTransit.Transports;
 
 namespace ProgressService.DomainServices
 {
@@ -34,7 +35,11 @@ namespace ProgressService.DomainServices
             testCreated.Id = test.Id;
             testCreated.Module = test.Module;
 
-            await _bus.Publish(testCreated);
+            await _bus.Publish(testCreated, context =>
+            {
+                context.SetRoutingKey("test.created");
+            });
+
             return test;
         }
 
@@ -54,7 +59,10 @@ namespace ProgressService.DomainServices
                     Id = test.Id,
                     Module = test.Module
                 };
-                await _bus.Publish(testUpdated);
+                await _bus.Publish(testUpdated, context =>
+                {
+                    context.SetRoutingKey("test.updated");
+                });
 
                 return returnedTest;
             }
@@ -85,7 +93,10 @@ namespace ProgressService.DomainServices
                 {
                     Id = testToDelete.Id,
                 };
-                await _bus.Publish(testDeleted);
+                await _bus.Publish(testDeleted, context =>
+                {
+                    context.SetRoutingKey("test.deleted");
+                });
 
                 return testToDelete;
             }

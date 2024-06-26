@@ -40,9 +40,7 @@ builder.Services.AddDbContext<ProgressDbContext>(options =>
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<StudyProgramCreatedConsumer>();
-
     x.AddConsumer<StudentCreatedConsumer>();
-
     x.AddConsumer<TestCreatedConsumer>();
     x.AddConsumer<TestUpdatedConsumer>();
     x.AddConsumer<TestDeletedConsumer>();
@@ -57,19 +55,46 @@ builder.Services.AddMassTransit(x =>
 
         cfg.ReceiveEndpoint("Progressservice-queue", e =>
         {
+            // Configure consumers to handle specific routing keys
             e.ConfigureConsumer<TestCreatedConsumer>(context);
             e.ConfigureConsumer<TestUpdatedConsumer>(context);
             e.ConfigureConsumer<TestDeletedConsumer>(context);
-
             e.ConfigureConsumer<StudentCreatedConsumer>(context);
-
             e.ConfigureConsumer<StudyProgramCreatedConsumer>(context);
+
+            // Bind the queue to the exchange with specific routing keys
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "test.created";
+            });
 
             e.Bind("default-exchange", x =>
             {
                 x.ExchangeType = "topic";
-                x.RoutingKey = "#";
+                x.RoutingKey = "test.updated";
             });
+
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "test.deleted";
+            });
+
+            // You can add more bindings for other routing keys as needed
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "student.created";
+            });
+
+            e.Bind("default-exchange", x =>
+            {
+                x.ExchangeType = "topic";
+                x.RoutingKey = "studyprogram.created";
+            });
+
+
         });
 
         cfg.ConfigureEndpoints(context);
