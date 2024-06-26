@@ -70,6 +70,11 @@ builder.Services.AddMassTransit(x =>
                 x.RoutingKey = "student.created";
                 x.ExchangeType = "topic";
             });
+            e.Bind("default-exchange", x =>
+            {
+                x.RoutingKey = "applicant.updated";
+                x.ExchangeType = "topic";
+            });
         });
 
     });

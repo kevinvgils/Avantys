@@ -34,7 +34,7 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<ApplicantCreatedConsumer>();
     x.AddConsumer<ApplicantUpdatedConsumer>();
-    x.AddConsumer<InterviewCreatedConsumer>();
+    x.AddConsumer<InterviewUpdatedConsumer>();
     x.UsingRabbitMq((context, cfg) =>
     {
         cfg.Host("rabbitmq", "/", h =>
@@ -52,7 +52,7 @@ builder.Services.AddMassTransit(x =>
         {
             e.ConfigureConsumer<ApplicantCreatedConsumer>(context);
             e.ConfigureConsumer<ApplicantUpdatedConsumer>(context);
-            e.ConfigureConsumer<InterviewCreatedConsumer>(context);
+            e.ConfigureConsumer<InterviewUpdatedConsumer>(context);
             e.Bind("default-exchange", x =>
             {
                 x.ExchangeType = "topic";
@@ -66,7 +66,7 @@ builder.Services.AddMassTransit(x =>
             e.Bind("default-exchange", x =>
             {
                 x.ExchangeType = "topic";
-                x.RoutingKey = "interview.created";
+                x.RoutingKey = "interview.updated";
             });
         });
         cfg.ConfigureEndpoints(context);

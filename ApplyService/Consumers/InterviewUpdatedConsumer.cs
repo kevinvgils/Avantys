@@ -7,12 +7,12 @@ using MassTransit;
 
 namespace ApplyService.Consumers
 {
-    public class InterviewCreatedConsumer : IConsumer<InterviewUpdated>
+    public class InterviewUpdatedConsumer : IConsumer<InterviewUpdated>
     {
         private readonly IApplyService _applyService;
         private readonly IEventStoreRepository _eventStore;
 
-        public InterviewCreatedConsumer(IApplyService applyService, IEventStoreRepository eventStore)
+        public InterviewUpdatedConsumer(IApplyService applyService, IEventStoreRepository eventStore)
         {
             _applyService = applyService;
             _eventStore = eventStore;
