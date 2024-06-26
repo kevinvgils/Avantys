@@ -13,16 +13,15 @@ namespace LectureService.Consumers
         {
             _lectureRepository = lectureRepository;
         }
-        public Task Consume(ConsumeContext<ClassCreated> context)
+        public async Task Consume(ConsumeContext<ClassCreated> context)
         {
             var @event = context.Message;
             var newClass = new Class();
-
+            Console.WriteLine("LOGGINGGGG");
+            Console.WriteLine(@event);
             newClass.ClassEvent(@event);
 
-            _lectureRepository.AddClass(newClass);
-
-            return Task.CompletedTask;
+            await  _lectureRepository.AddClass(newClass);
         }
     }
 }
