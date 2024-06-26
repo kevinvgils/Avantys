@@ -19,9 +19,19 @@ namespace InterviewService.Infrastructure
             await _context.SaveChangesAsync();
         }
 
+        public async Task<List<Interview>> GetAllInterviews()
+        {
+            return await _context.Interviews.ToListAsync();
+        }
+
+        public async Task<Interview> GetInterviewByApplicantId(Guid applicantId)
+        {
+            return await _context.Interviews.FirstOrDefaultAsync(interview => interview.ApplicantId == applicantId);
+        }
+
         public async Task<Interview> GetInterviewById(Guid id)
         {
-            return await _context.Interviews.FindAsync(id);
+            return await _context.Interviews.FirstOrDefaultAsync(interview => interview.InterviewId == id);
         }
 
         public async Task UpdateInterview(Interview interview)

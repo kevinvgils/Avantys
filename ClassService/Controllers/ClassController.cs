@@ -25,7 +25,14 @@ namespace ClassService.Controllers
             @class.StudyProgramId = newClass.StudyProgramId;
             var createdClass = await _classService.CreateClassAsync(@class);
 
-            return Ok(createdClass);
+            var result = new
+            {
+                createdClass.ClassCode,
+                StudyProgramId = createdClass.StudyProgramId.ToString().ToUpper(),
+                ClassId = createdClass.ClassId.ToString().ToUpper()
+            };
+
+            return Ok(result);
         }
 
     }

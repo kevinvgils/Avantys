@@ -7,6 +7,9 @@ namespace InterviewService.DomainServices.Interfaces
         Task<Interview> CreateInterviewAsync(Interview interview);
         Task<Interview> UpdateInterviewAsync(Guid id, Interview updatedInterview);
         Task<Interview> GetInterviewByIdAsync(Guid id);
+        Task<Interview> GetInterviewByApplicantIdAsync(Guid id);
+        Task<List<Interview>> GetAllInterviewsAsync();
+
 
     }
 }
